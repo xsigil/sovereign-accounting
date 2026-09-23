@@ -16,7 +16,7 @@ Traditional accounting education deliberately obscures simple algebraic facts be
 By reducing double-entry bookkeeping to physical conservation laws on directed graphs and framing tax classification as boolean predicate evaluation, we demonstrate that complete financial command requires nothing more than:
 1. **Kirchhoff's Current Law (KCL):** Bookkeeping as flow conservation on directed graphs ($\sum I_k = 0$).
 2. **Deterministic Throughput:** Cash flow rigorously derived from asset subspace projection ($\text{Cash} = \text{Profit} + \text{Liabilities} + \text{Equity} - \text{NonCash}$).
-3. **Predicate Logic Taxation:** Taxable income as indicator function masking ($\sum \text{Amount}(t) \times \mathbb{I}_{\{\text{is\_taxable}(t)\}}$) offloaded to minimal CLI filters.
+3. **Predicate Logic Taxation:** Taxable income as indicator function masking ($\sum \text{Amount}(t) \times \mathbb{I}_{\{\mathrm{isTaxable}(t)\}}$) offloaded to minimal CLI filters.
 4. **The Unix Toolchain:** Pure plain text (`.journal`), Haskell-verified invariance (`hledger`), POSIX pipes (`sh`, `gawk`, `m4`, `bc`), and physical desk calculator registers ($M+/M-$, $GT$).
 
 ---
@@ -34,7 +34,7 @@ Insolvency under profitability ("profitable bankruptcy") is reduced to the trivi
 
 ### III. Indicator Function for Statutory Evaluation
 Statutory tax determination maps a transaction $t \in T$ onto a binary projection via a unary predicate:
-$$\text{Taxable Income} = \sum_{t \in T} \text{Amount}(t) \times \mathbb{I}_{\{\text{is\_taxable}(t) = \text{True}\}} - \text{Deductions}$$
+$$\text{Taxable Income} = \sum_{t \in T} \text{Amount}(t) \times \mathbb{I}_{\{\mathrm{isTaxable}(t) = \mathrm{True}\}} - \text{Deductions}$$
 
 ---
 
@@ -76,3 +76,46 @@ $$\text{Taxable Income} = \sum_{t \in T} \text{Amount}(t) \times \mathbb{I}_{\{\
 │       ├── dict/                      # ja.m4, en.m4 dictionary bindings
 │       └── balance.gp.m4              # Language-agnostic gnuplot pipeline
 └── dist/                              # Compiled artifacts (PDFs, standalone charts)
+
+```
+
+---
+
+## 5. Quick Start
+
+### Build the Monograph
+
+Ensure a TeX Live distribution (`lualatex`), `m4`, `gnuplot`, and `make` are present:
+
+```bash
+# Compile the complete publication-grade monograph (PDF)
+make pdf
+
+# Build localized charts (Japanese / English)
+make plots LANG=ja
+make plots LANG=en
+
+```
+
+### Stream Pipeline Verification
+
+```bash
+# Verify ledger balance invariants using hledger
+hledger check --file tests/sample.journal
+
+# Run raw transaction streams through the Go AI tax predicate filter
+cat raw_transactions.journal | hledger-ai-taxfilter --accounts accounts.txt | hledger -f - balance
+
+```
+
+---
+
+## 6. License
+
+This project is released under the **MIT License**.
+
+Tools of economic self-determination belong to humanity, not to closed-source tollbooths.
+
+```
+
+```
