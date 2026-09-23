@@ -6,85 +6,116 @@
 
 ## 1. Philosophy & Manifesto
 
-Modern personal finance and corporate accounting have been trapped inside unexaminable black boxes: proprietary cloud platforms that harvest behavioral telemetry, subscription-gated apps, and fragile, formula-corrupted spreadsheets.
+Modern personal finance and corporate accounting have been trapped inside unexaminable black boxes: proprietary cloud platforms that harvest behavioral telemetry, subscription-gated SaaS platforms, and fragile, formula-corrupted spreadsheets.
 
-**Sovereign Accounting** is a definitive monograph and executable framework built upon one non-negotiable axiom:
-**Financial data must remain plain text, mathematically verifiable, and strictly controlled by the observer.**
+Traditional accounting education deliberately obscures simple algebraic facts behind archaic jargon ("debit/credit" dichotomies, indirect cash flow acrobatics, and arbitrary thresholds), engineering cognitive dissonance to enforce rent-seeking dependence on certified intermediaries.
 
-By grounding double-entry bookkeeping in graph-theoretic flow conservation (Kirchhoff's Laws) and utilizing the deterministic rigor of `hledger` (Haskell), we demonstrate that complete financial command requires nothing more than:
-1. Pure plain text (`.journal`) anchored by cryptographic version control (`git`).
-2. Minimal POSIX toolchains (`sh`, `gawk`, `m4`, `bc`).
-3. Deterministic visualization via `gnuplot` and publication-grade typesetting with LuaLaTeX.
-4. Physical registers: an ordinary four-function desk calculator ($M+/M-$ and $GT$) or terminal `bc -l`.
+**Sovereign Accounting** is a definitive monograph and executable framework built upon one non-negotiable axiom:  
+**Financial data must remain plain text, mathematically verifiable, and strictly controlled by the sovereign actor.**
+
+By reducing double-entry bookkeeping to physical conservation laws on directed graphs and framing tax classification as boolean predicate evaluation, we demonstrate that complete financial command requires nothing more than:
+1. **Kirchhoff's Current Law (KCL):** Bookkeeping as flow conservation on directed graphs ($\sum I_k = 0$).
+2. **Deterministic Throughput:** Cash flow rigorously derived from asset subspace projection ($\text{Cash} = \text{Profit} + \text{Liabilities} + \text{Equity} - \text{NonCash}$).
+3. **Predicate Logic Taxation:** Taxable income as indicator function masking ($\sum \text{Amount}(t) \times \mathbb{I}_{\{\mathrm{isTaxable}(t)\}}$) offloaded to minimal CLI filters.
+4. **The Unix Toolchain:** Pure plain text (`.journal`), Haskell-verified invariance (`hledger`), POSIX pipes (`sh`, `gawk`, `m4`, `bc`), and physical desk calculator registers ($M+/M-$, $GT$).
 
 ---
 
-## 2. Core Stack
+## 2. Core Mathematical Foundations
 
-- **Ledger Engine:** `hledger` (Haskell-based formal double-entry verification)
-- **Document Engine:** LuaLaTeX + `markdown` package + deterministic TeX macro namespacing
+### I. Kirchhoff's Current Law (Double-Entry Invariance)
+Every transaction is a closed directed circuit. Over any node (account) and the global ledger, algebraic divergence is identically zero:
+$$\sum_{k=1}^n I_k = 0 \iff (\text{Assets} + \text{Expenses}) - (\text{Liabilities} + \text{Equity} + \text{Revenues}) = 0$$
+
+### II. Cash Flow Throughput Equation
+By decomposing $\text{Assets} = \text{Cash} + \text{NonCash}$ and substituting global profit ($\text{Profit} = \text{Revenues} - \text{Expenses}$), cash throughput is uniquely determined without indirect-method obfuscation:
+$$\Delta \text{Cash} = \text{Profit} + \Delta \text{Liabilities} + \Delta \text{Equity} - \Delta \text{NonCash}$$
+Insolvency under profitability ("profitable bankruptcy") is reduced to the trivial sign condition $\Delta \text{NonCash} > \text{Profit} + \Delta \text{Liabilities} + \Delta \text{Equity}$.
+
+### III. Indicator Function for Statutory Evaluation
+Statutory tax determination maps a transaction $t \in T$ onto a binary projection via a unary predicate:
+$$\text{Taxable Income} = \sum_{t \in T} \text{Amount}(t) \times \mathbb{I}_{\{\mathrm{isTaxable}(t) = \mathrm{True}\}} - \text{Deductions}$$
+
+---
+
+## 3. Core Stack
+
+- **Ledger Engine:** `hledger` (Haskell-based double-entry verification enforcing conservation laws)
+- **Tax Classification Filter:** `hledger-ai-taxfilter` (Go CLI pipeline executing Gemini API predicate evaluation)
+- **Document Engine:** LuaLaTeX + deterministic TeX macro namespacing (`\mth...`, `\ja...`, `\txt...`)
 - **Pipeline Automation:** GNU Make + POSIX `m4` (bilingual Japanese/English asset pipeline)
-- **Data Ingestion & Filtering:** `gawk` + pure shell
-- **Plotting:** Gnuplot via `.gp.m4` declarative templates
-- **Licensing:** MIT License (Permissive & Radical Autonomy)
+- **Stream Ingestion:** `gawk` + POSIX shell
+- **Plotting:** Gnuplot driven by `.gp.m4` declarative templates
+- **Hardware Verification:** Standard 4-function desk calculator ($M+/M-$ and $GT$) & terminal `bc -l`
+- **Licensing:** MIT License (Radical Personal Autonomy)
 
 ---
 
-## 3. Directory Layout
+## 4. Directory Layout
 
 ```text
 .
 ├── LICENSE                 # MIT License
-├── MANIFESTO.md            # Manifesto of Financial Sovereignty
-├── CODING_CONVENTIONS.md   # Rigorous macro and pipeline conventions
-├── Makefile                # Deterministic single-command build
 ├── README.md               # Repository entrypoint
+├── Makefile                # Deterministic single-command build
 ├── src/
 │   ├── main.tex            # LuaLaTeX root monograph
-│   ├── macros.tex          # Prefixed macro definitions (\mth..., \ja..., \txt...)
-│   ├── frontmatter/
-│   │   ├── license.tex
-│   │   └── manifesto.tex
+│   ├── preamble/           # Modular package configurations
+│   ├── macros.tex          # Strict macro definitions (\mth..., \ja..., \txt...)
+│   ├── math/               # First-principles derivations
+│   │   ├── accounting_kirchhoffs_current_law.tex
+│   │   └── taxable_indicator.tex
 │   ├── chapters/
-│   │   ├── 01_sovereignty/       # Philosophy of Plain Text Accounting
-│   │   ├── 02_math_double_entry/ # Double-entry as conservative vector fields
-│   │   ├── 03_hledger_core/      # Syntax, multi-currency, assertions
-│   │   ├── 04_registers_column/  # Column: Compound interest via calc M+/GT & bc
-│   │   ├── 05_unix_pipeline/     # Stream processing with gawk and m4
-│   │   └── 06_realworld_ingest/  # Declarative CSV rules & exchange tracking
+│   │   ├── 01_introduction.tex        # Deconstructing legacy deceptions & manifesto
+│   │   ├── 02_graph_conservation/    # KCL, directed graphs, and algebraic invariance
+│   │   ├── 03_cashflow_throughput/    # Projection algebra and insolvency mechanics
+│   │   ├── 04_predicate_taxation/     # Indicator functions & Gemini CLI filters
+│   │   ├── 05_hledger_execution/      # Journal syntax, multi-currency, assertions
+│   │   └── 06_registers_and_bc/       # Physical M+/GT registers and geometric series
 │   └── plots/
-│       ├── dict/                 # ja.m4, en.m4 dictionary bindings
-│       └── balance.gp.m4         # Language-agnostic gnuplot pipeline
-└── dist/                         # Compiled artifacts (PDFs, standalone charts)
+│       ├── dict/                      # ja.m4, en.m4 dictionary bindings
+│       └── balance.gp.m4              # Language-agnostic gnuplot pipeline
+└── dist/                              # Compiled artifacts (PDFs, standalone charts)
+
 ```
 
 ---
 
-## 4. Quick Start
+## 5. Quick Start
 
 ### Build the Monograph
 
-Ensure you have a modern TeX Live distribution (`lualatex`), `m4`, `gnuplot`, and `make`:
+Ensure a TeX Live distribution (`lualatex`), `m4`, `gnuplot`, and `make` are present:
 
 ```bash
-# Deterministic compilation of the full monograph (PDF)
+# Compile the complete publication-grade monograph (PDF)
 make pdf
 
-# Build language-specific assets (e.g. Japanese or English figures)
+# Build localized charts (Japanese / English)
 make plots LANG=ja
 make plots LANG=en
+
 ```
 
-### Validate Ledger Integrity
+### Stream Pipeline Verification
 
 ```bash
-# Check arithmetic invariants across test journals
+# Verify ledger balance invariants using hledger
 hledger check --file tests/sample.journal
+
+# Run raw transaction streams through the Go AI tax predicate filter
+cat raw_transactions.journal | hledger-ai-taxfilter --accounts accounts.txt | hledger -f - balance
+
 ```
 
 ---
 
-## 5. License
+## 6. License
 
-This project is licensed under the **MIT License**.  
-Tools of economic autonomy belong to humanity, not to closed-source tollbooths.
+This project is released under the **MIT License**.
+
+Tools of economic self-determination belong to humanity, not to closed-source tollbooths.
+
+```
+
+```
