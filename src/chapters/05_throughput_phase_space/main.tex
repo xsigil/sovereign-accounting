@@ -1,0 +1,72 @@
+\chapter{スループット相空間と企業の幾何学的クラスタリング}
+\label{chap:throughput_phase_space}
+
+\section{原価計算という虚構の解体}
+
+伝統的な全部原価計算（Absorption Costing）が抱える最大の構造的欠陥は、発生した固定製造間接費を在庫（仕掛品・製品）に「配賦」することで、販売されていない在庫を資産（\(\mathrm{Assets}\)）の項目へと逃避させ、計算上の見かけの利益（\(\mathrm{Profit}\)）を偽造できる点にある。
+
+しかし、前章までに演繹した現金スループットの基本方程式、
+\begin{equation}
+    \Delta \mathrm{Cash} = \mathrm{Profit} + \Delta \mathrm{Liabilities} + \Delta \mathrm{Equity} - \Delta \mathrm{NonCash}
+\end{equation}
+に照らせば、この粉飾は瞬時に破綻を露呈する。
+倉庫に積み上がった過剰在庫は非現金資産（\(\Delta \mathrm{NonCash}\)）の急激な膨張を意味し、会計帳簿上の \(\mathrm{Profit}\) がいかに巨額であろうとも、引き算の項として \(\Delta \mathrm{Cash}\) を直接圧殺する。
+
+制約条件理論（Theory of Constraints: TOC）におけるスループット・アカウンティング（Throughput Accounting）は、この配賦の迷宮を完全に排除し、系を通過する純粋な現金のダイナミクスのみを以下の3つの基礎変数に還元する。
+
+\begin{itemize}
+    \item \textbf{スループット (\(T\)):} 販売というゲートを通過して系内に流入した純現金速度（\(\mathrm{Revenues} - \mathrm{Totally\ Variable\ Costs}\)）。
+    \item \textbf{投資・拘束資産 (\(I\)):} スループットを生み出すために系内部に滞留・拘束されている総資本（在庫、設備、機材、敷金等の真の \(\mathrm{NonCash}\)）。
+    \item \textbf{業務費用 (\(\mathrm{OE}\)):} 拘束資産 \(I\) を回転させ、スループット \(T\) へ変換し続けるために系外へ恒常流出する固定スカラー流（人件費、家賃、通信費等）。
+\end{itemize}
+
+このとき、単位時間あたりに系内に実質残留する真の純現金創出量は \(T - \mathrm{OE}\)（純利益）であり、投下資本効率としての \(\mathrm{ROI}\)（投下資本利益率）は、いかなる配賦規則も介さず以下の無次元分数として一意に定義される。
+
+\begin{equation}
+    \mathrm{ROI} = \frac{T - \mathrm{OE}}{I}
+\end{equation}
+
+\section{\(I\)--\((T - \mathrm{OE})\) 2次元相空間の幾何学}
+
+企業、事業体、あるいは個人の経済活動の健全性は、横軸に拘束資本 \(I\)、縦軸に純現金創出量 \(T - \mathrm{OE}\) を配した2次元相空間（Phase Space）上にプロットすることで、一切の粉飾を許さず完全に可視化される。
+
+この相空間において、原点 \((0, 0)\) と各事業体のプロット点 \((I, T - \mathrm{OE})\) を結ぶベクトルの傾き（Slope）こそが、その主体の \(\mathrm{ROI}\) に他ならない。
+
+\begin{equation}
+    \mathrm{Slope} = \tan \theta = \frac{T - \mathrm{OE}}{I} = \mathrm{ROI}
+\end{equation}
+
+\subsection{相空間における4つのクラスタリング}
+
+相空間上にプロットされた経済主体は、その幾何学的配置によって冷酷に4つの類型へとクラスタリングされる。
+
+\begin{enumerate}
+    \item \textbf{超高勾配領域（Sovereign Hacker / 極小精鋭）:}\\
+    \(I \to 0^+\) の極限近傍でありながら、極めて高い \(T - \mathrm{OE} > 0\) を維持する領域。過剰なオフィス、在庫、無駄なSaaSライセンスを一切持たず、自身の計算機、物理電卓、ローカルパイプラインのみで知財スループットを生成する。傾き（\(\mathrm{ROI}\)）は垂直（\(\infty\)）に近づき、外部環境の激変に対する耐空時間は無限大となる。
+
+    \item \textbf{資本集約型ジャイアント（Capital Intensive Infrastructure）:}\\
+    莫大な設備・研究開発投資（巨額の \(I\)）を投下し、相応に巨大な \(T - \mathrm{OE} \gg 0\) を回収する領域（半導体ファウンドリ、鉄道、エネルギー産業等）。参入障壁は強固であるが、市場のボトルネック変動により \(T\) が微小低下しただけで、巨大な \(\mathrm{OE}\) を補填できず急激に傾きが寝そべる脆弱性を内包する。
+
+    \item \textbf{機能不全・ゾンビ領域（Stagnant / Friction-bound）:}\\
+    資本 \(I\) の規模は小さいが、同時にスループット創出能力を欠き、\(T - \mathrm{OE} \approx 0\) または小幅のマイナスに沈んでいる領域。系としてのレバー（梃子）が機能しておらず、静かに資本を摩耗させていく。
+
+    \item \textbf{資本の罠・粉飾放蕩クラスタ（Capital Trap / Bloat-ware）:}\\
+    多額の資本金や借入金によって巨大な \(I\)（豪華なオフィス、過剰人員、乱立するSaaS契約）を抱え込みながら、実質的なスループットが業務費用を賄えず \(T - \mathrm{OE} < 0\)（第4象限）に転落している状態。従来の会計では資産計上や償却の繰延によって黒字を偽装できるが、この相空間上では「単に資本 \(I\) を溶解させながら現金を系外へ漏洩させている欠陥回路」として即座に摘発される。
+\end{enumerate}
+
+\section{決定論的スクリーニングパイプライン}
+
+この幾何学的還元により、上場企業の有価証券報告書（EDINET / XBRL）や個人の \texttt{hledger} ジャーナルから抽出したデータを、POSIXパイプラインを通じて機械的に分類・評価することが可能となる。
+
+\begin{verbatim}
+# hledger から直接 T, I, OE を抽出し相空間座標を出力する擬似パイプライン
+hledger balance -p "this month" \
+    --alias '/^Income/ = T' \
+    --alias '/^Expenses:Variable/ = TVC' \
+    --alias '/^Expenses:Fixed/ = OE' \
+    --alias '/^Assets:NonCash/ = I'
+\end{verbatim}
+
+アナリストの定性的な言説や、損益計算書のテクニカルな調整項目を読む必要は一切ない。
+系がどれだけの資本を拘束し（\(I\)）、単位時間あたりにどれだけの現金を外部へ純流出させずに生み出したか（\(T - \mathrm{OE}\)）。
+ただその座標を Gnuplot で相空間に打刻するだけで、あらゆる企業の筋肉量と贅肉の比率は一目瞭然となる。

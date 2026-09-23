@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (TeX Live 2026/Arch Linux)  (format=lualatex 2026.9.15)  24 SEP 2026 06:56
+This is LuaHBTeX, Version 1.24.0 (TeX Live 2026/Arch Linux)  (format=lualatex 2026.9.15)  24 SEP 2026 07:24
  restricted system commands enabled.
 **src/sovereign_accounting.tex
 (./src/sovereign_accounting.tex
@@ -1041,25 +1041,40 @@ LaTeX Font Info:    Font shape `JY3/gt/m/n' will be
 (load cache: extra_lmmono10-regular.luc)
 LaTeX Font Info:    Font shape `JT3/gt/m/n' will be
 (Font)              scaled to size 9.24713pt on input line 82.
- [3]) [4] (./sovereign_accounting.aux
-(./src/chapters/01_introduction/main.aux))
+ [3]) [4]
+\openout2 = src/chapters/05_throughput_phase_space//main.aux
+
+(./src/chapters/05_throughput_phase_space//main.tex
+第2章
+[5
+
+
+
+
+] [6]) [7] (./sovereign_accounting.aux
+(./src/chapters/01_introduction/main.aux)
+(./src/chapters/05_throughput_phase_space//main.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 )
 
 Here is how much of LuaTeX's memory you used:
- 8544 strings out of 476076
+ 8587 strings out of 476076
  156562,794899 words of node,token memory allocated
- 1509 words of node memory still in use:
-   11 hlist, 2 vlist, 5 rule, 2 glue, 4 kern, 1 glyph, 392 attribute, 59 glue_sp
-ec, 48 attribute_list, 3 write, 14 user_defined nodes
-   avail lists: 1:13,2:44054,3:360,4:239,5:123,6:33,7:4572,8:44,9:2098,10:24,11:
+ 1599 words of node memory still in use:
+   11 hlist, 2 vlist, 5 rule, 2 glue, 4 kern, 1 glyph, 434 attribute, 59 glue_sp
+ec, 51 attribute_list, 3 write, 14 user_defined nodes
+   avail lists: 1:13,2:44009,3:397,4:239,5:125,6:33,7:4899,8:49,9:2098,10:24,11:
 82
- 30722 multiletter control sequences out of 65536+600000
- 63 fonts using 56696007 bytes
- 119i,10n,118p,2129b,447s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 30750 multiletter control sequences out of 65536+600000
+ 70 fonts using 57130271 bytes
+ 119i,10n,118p,2129b,525s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf></usr/share
 /texmf-dist/fonts/opentype/public/lm/lmroman7-regular.otf></usr/share/texmf-dist
 /fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf-dist/fonts/ope
@@ -1070,15 +1085,17 @@ aji/HaranoAjiGothic-Medium.otf></usr/share/texmf-dist/fonts/opentype/public/lm/l
 mroman10-bold.otf></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.p
 fb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.
-pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/font
-s/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on sovereign_accounting.pdf (4 pages, 250955 bytes).
+s/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/shar
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols
+/msbm10.pfb>
+Output written on sovereign_accounting.pdf (7 pages, 340452 bytes).
 
-PDF statistics: 109 PDF objects out of 1000 (max. 8388607)
- 69 compressed objects within 1 object stream
+PDF statistics: 126 PDF objects out of 1000 (max. 8388607)
+ 81 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 1048576)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 
