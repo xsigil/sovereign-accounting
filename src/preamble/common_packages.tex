@@ -1,0 +1,42 @@
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[itemize]{label=--}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{calcbox}[1]{
+  colback=gray!5!white,
+  colframe=gray!60!black,
+  fonttitle=\bfseries,
+  title={#1},
+  arc=2mm,
+  breakable
+}
+
+\newtcolorbox{terminalbox}[1]{
+  colback=black!95!white,
+  coltext=green!90!white,
+  colframe=black!80!gray,
+  fonttitle=\bfseries\ttfamily,
+  fontupper=\small\ttfamily,
+  title={#1},
+  arc=1mm,
+  breakable
+}
+
+\newtcolorbox{rulebox}[1]{
+  colback=blue!3!white,
+  colframe=blue!50!black,
+  fonttitle=\bfseries,
+  title={#1},
+  arc=2mm,
+  breakable
+}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  urlcolor=blue!80!black
+}

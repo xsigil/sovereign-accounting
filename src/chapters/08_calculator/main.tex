@@ -1,0 +1,48 @@
+\ifja
+\chapter{電卓の物理学：ハードウェアレジスタによる即時検証}
+\label{chap:calculator_physics}
+
+\section{キー操作と内部バッファの挙動}
+実務電卓は、CPUの内部レジスタと直結した高効率なステートマシンである。
+\begin{itemize}
+    \item \textbf{M+ / M-}: ディスプレイの数値を独立アキュムレータ（$M$）に加算／減算。
+    \item \textbf{RM / CM}: 独立メモリの読み出し（Recall）および初期化（Clear）。
+    \item \textbf{GT (Grand Total)}: 「$=$」キー押下で確定された値を累積蓄積するシフトレジスタ。
+\end{itemize}
+
+\section{定数計算と漸化式}
+\input{src/math/calculator_sequences.tex}
+
+\begin{calcbox}{定数計算による現在価値（PV）と年金現価の即時算定}
+将来キャッシュフロー $C$、割引率 $r$、期間 $n$ の年金現価合計：
+\begin{enumerate}
+    \item $[AC]$ でクリア後、$[C] \div [1 + r] [=]$（第1期の現在価値がGTに加算）
+    \item $[=]$ を残り $(n-1)$ 回押下（各期の割引額が順次加算）
+    \item $[GT]$ を押下 $\to PV_{\text{annuity}}$ が一撃で求まる。
+\end{enumerate}
+\end{calcbox}
+
+\else
+\chapter{Physics of the Calculator: Instant Hardware Register Verification}
+\label{chap:calculator_physics}
+
+\section{Key Operations and Buffer State Dynamics}
+Commercial desktop calculators operate as deterministic finite-state machines directly coupled to internal hardware registers.
+\begin{itemize}
+    \item \textbf{M+ / M-}: Adds/subtracts current display buffer to the independent accumulator ($M$).
+    \item \textbf{RM / CM}: Recall and clear the independent memory accumulator.
+    \item \textbf{GT (Grand Total)}: Shift register accumulating all values committed via the "$=$" key.
+\end{itemize}
+
+\section{Constant Calculation and Recurrence Relations}
+\input{src/math/calculator_sequences.tex}
+
+\begin{calcbox}{Instant Annuity Present Value (PV) via Constant Division}
+Given recurring cash flow $C$, discount rate $r$, and horizon $n$:
+\begin{enumerate}
+    \item Press $[AC]$, then input $[C] \div [1 + r] [=]$ (Period 1 added to GT).
+    \item Press $[=]$ for the remaining $(n-1)$ iterations.
+    \item Press $[GT] \to$ The total $PV_{\text{annuity}}$ is evaluated instantly.
+\end{enumerate}
+\end{calcbox}
+\fi
