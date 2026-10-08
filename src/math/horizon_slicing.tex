@@ -1,0 +1,22 @@
+\begin{equation}
+    \text{Asset} = \text{Cash} + \text{NonCash}
+\end{equation}
+\begin{equation}
+    \mathbf{\text{Asset} = \text{Cash} + \underbrace{\text{AR} + \text{Inv}}_{\ifja \text{1年流動（運転資本）}\else \text{1-Year Operational}\fi} + \underbrace{\text{Mid-Term}}_{\ifja \text{3年投資（IT/設備）}\else \text{3-Year Capital (IT/Equipment)}\fi} + \underbrace{\text{RealEstate} + \text{Intangibles}}_{\ifja \text{長期・固定（不動産/のれん）}\else \text{Illiquid Long-Term}\fi}}
+\end{equation}
+\begin{equation}
+    \mathbf{\text{Liabilities} = \underbrace{\text{AP} + \text{Accrued}}_{\ifja \text{1年短期営業債務}\else \text{1-Year Operational}\fi} + \underbrace{\text{Short-Term Debt}}_{\ifja \text{1年内返済借入}\else \text{Due Within 1 Year}\fi} + \underbrace{\text{Mid-Term Debt}}_{\ifja \text{3年以内償還借入}\else \text{Due Within 3 Years}\fi} + \underbrace{\text{Long-Term Debt + Bonds}}_{\ifja \text{3年超長期負債}\else \text{Long-Term Liabilities}\fi}}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+\ifja \text{左側（Asset: 現金化タイマー）} \else \text{Left (Asset: Liquidity Timer)} \fi &\quad \longleftrightarrow \quad \ifja \text{右側（Liabilities: 返済時限爆弾）} \else \text{Right (Liabilities: Time Bomb)} \fi \\
+\text{Cash (0s)} &\quad \longleftrightarrow \quad \ifja \text{即時決済手形・未払金} \else \text{Immediate Obligations} \fi \\
+\text{AR + Inv (1y)} &\quad \longleftrightarrow \quad \text{AP} + \ifja \text{短期借入 (1y)} \else \text{Short-Term Debt (1y)} \fi \\
+\mathbf{\text{Mid-Term Assets (3y)}} &\quad \longleftrightarrow \quad \mathbf{\text{Mid-Term Debt (3y)}} \\
+\text{Real Estate / Intangibles} &\quad \longleftrightarrow \quad \text{Long-Term Debt} + \text{Equity}
+\end{aligned}
+\end{equation}
+\begin{align}
+    \text{Net Debt} &\equiv (\text{Short-Term Debt} + \text{Mid-Term Debt}) - \text{Cash} \\
+    \mathbf{\ifja \text{債務償還年数} \else \text{Debt Redemption Horizon} \fi} &= \mathbf{\frac{\text{Net Debt}}{\ifja \text{営業利益} + \text{減価償却費} \else \text{Operating Profit} + \text{Depreciation} \fi} \le 3.0 \quad [\ifja \text{年} \else \text{years} \fi]}
+\end{align}

@@ -1,0 +1,99 @@
+\ifja
+\chapter{呪文の終焉：「しーくりくりし」の代数構造}
+\label{chap:cost_of_goods_sold}
+
+日本の商業高校や簿記検定で受講生を脱落させる象徴が、「しーくりくりし（仕入・繰越商品・繰越商品・仕入）」という呪文である。本章では、この呪文を「期中の実務的手抜き（簡略化）を期末に補正するパッチ処理」として数式で解剖する。
+
+\section{期中の現実的な割り切りと歪み}
+理想的な厳密理論において、商品を購入した瞬間は資産（棚卸資産 $\text{Inventory}$）の増加であり、商品が1つ販売されるたびに資産から費用（売上原価 $\text{COGS}$）へ振り替えるべきである。
+
+\input{src/math/cogs_equations.tex}
+
+しかし、旧来の小売店舗において商品が1個売れるごとに在庫台帳を引き落とし仕訳を切るのは非現実的であった。そのため実務は次のような「手抜き」を採用した。
+\begin{quote}
+\textit{「今期購入した商品は、とりあえず全額を当期の費用（仕入勘定 $P_{\text{current}}$）に放り込んでしまえ」}
+\end{quote}
+
+この乱暴な簡略化により、決算日を迎えた帳簿には必ず\textbf{2つの構造的歪み}が生じる。
+\begin{enumerate}
+    \item \textbf{期首在庫の未算入:} 前期から倉庫に引き継いだ資産 $\text{Inv}_{\text{begin}}$ が今期の費用勘定に含まれていない。
+    \item \textbf{期末在庫の過大費用化:} 当期に購入したが売れ残った資産 $\text{Inv}_{\text{end}}$ が費用の中に混入している。
+\end{enumerate}
+
+\section{方程式を復元する2段階のキャリブレーション}
+この2つの歪みを直し、会計方程式の均衡を復元するのが「しーくりくりし」の正体である。
+
+\subsection{Step 1: 前期ストックの費用プールへの合流（しーくり）}
+前期から持ち越された資産を減らし、今期の費用プール（仕入勘定）へ投入する。
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llrllr}
+\toprule
+\textbf{運用側（借方: 費用増）} & 金額 & \quad & \textbf{調達・資産減少側（貸方: 資産減）} & 金額 \\
+\midrule
+仕入（費用） & $\text{Inv}_{\text{begin}}$ 円 & & 繰越商品（資産） & $\text{Inv}_{\text{begin}}$ 円 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Step 2: 売れ残りの資産退避（くりし）}
+期末に倉庫を実地棚卸しし、残存した商品を費用プールから控除して次期への資産として退避させる。
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llrllr}
+\toprule
+\textbf{運用側（借方: 資産増）} & 金額 & \quad & \textbf{調達・費用取消側（貸方: 費用減）} & 金額 \\
+\midrule
+繰越商品（資産） & $\text{Inv}_{\text{end}}$ 円 & & 仕入（費用） & $\text{Inv}_{\text{end}}$ 円 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{売上原価の恒等式}
+以上の2段階パッチによって、仕入勘定の残高は当初の購入額総和から、厳密な売上原価へと収束する。
+
+呪文の暗記は不要である。「期中に全額費用として雑に扱ったプールに対し、期首ストックを足し、期末ストックを引いて、真の消費量（フロー）を取り出す」という単純な差分操作にすぎない。
+
+\else
+\chapter{Demystifying Inventory Calibration: The Algebraic Structure of COGS}
+\label{chap:cost_of_goods_sold}
+
+Traditional accounting pedagogy forces students to memorize rigid adjustment mnemonics. We dissect this process as an algebraic two-step calibration patch correcting mid-period operational shortcuts.
+
+\section{Operational Approximations During the Period}
+In pure theoretical form, purchasing goods represents an increase in Assets ($\Delta \text{Inventory} > 0$), and sales trigger a balance transfer to Expenses ($\Delta \text{COGS} > 0, \Delta \text{Inventory} < 0$). To avoid real-time per-unit inventory tracking, manual practice records all purchases directly into an expense pool ($P_{\text{current}}$).
+
+\input{src/math/cogs_equations.tex}
+
+This introduces two predictable structural distortions at period end:
+\begin{enumerate}
+    \item \textbf{Unrecognized Beginning Stock:} Inventory carried over ($\text{Inv}_{\text{begin}}$) is omitted from the expense pool.
+    \item \textbf{Overstated Period Expense:} Unsold ending inventory ($\text{Inv}_{\text{end}}$) remains improperly categorized as expense.
+\end{enumerate}
+
+\section{Two-Step Calibration Patch}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llrllr}
+\toprule
+\textbf{Debit (Expense Increase)} & Amount & \quad & \textbf{Credit (Asset Reduction)} & Amount \\
+\midrule
+COGS / Purchases & $\text{Inv}_{\text{begin}}$ & & Inventory & $\text{Inv}_{\text{begin}}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llrllr}
+\toprule
+\textbf{Debit (Asset Increase)} & Amount & \quad & \textbf{Credit (Expense Reduction)} & Amount \\
+\midrule
+Inventory & $\text{Inv}_{\text{end}}$ & & COGS / Purchases & $\text{Inv}_{\text{end}}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The true Cost of Goods Sold is recovered deterministically via:
+No memorization is required; it is strictly a discrete difference equation restoring the equality of the system.
+\fi

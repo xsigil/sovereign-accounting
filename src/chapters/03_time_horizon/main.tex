@@ -1,0 +1,45 @@
+\ifja
+\chapter{時間軸の物理学：AssetとLiabilitiesの階層的分解}
+\label{chap:time_horizon}
+
+B/Sの左（資産）と右（負債）を無機質な勘定科目リストとして記憶してはならない。資産とは\textbf{「現金への変身カウントダウンタイマー」}であり、負債とは\textbf{「現金を奪う時限爆弾」}である。
+
+\section{資産（Asset）の階層的分解式}
+すべての資産は、現金化・回収までの「時間制限」によって次のように分解される。
+
+\input{src/math/horizon_slicing.tex}
+
+\begin{itemize}
+    \item \textbf{Cash（即時：0秒）:} 究極の流動性。いかなる決済も拒絶されない基底状態。
+    \item \textbf{短期1年流動（$\text{AR} + \text{Inv}$）:} 売掛金および在庫。日々の営業サイクルで1年以内に現金へ戻る運転資本。
+    \item \textbf{中期3年投資（$\text{Mid-Term}$）：} PC、サーバー、小規模設備、内装、ソフトウェア。陳腐化が極めて速く、\textbf{3年以内の創出キャッシュで回収し尽くすべき}資産。
+    \item \textbf{長期固定（$\text{RealEstate} + \text{Intangibles}$）：} 土地、建物、知財、M\&A時の買収プレミアム（のれん）。10年以上の超長期で拘束され、即座の換金性は絶望的である。
+\end{itemize}
+
+\section{負債（Liabilities）の階層的分解式}
+負債側も全く同様に、返済期日（デッドライン）によって階層化される。
+
+\section{時間軸マッチングの法則と「3年の壁」}
+経営の安定性とは、左右のカウントダウンタイマーの速度が同期しているか否かで決まる。
+
+もし左側が換金不能な不動産やのれんで埋まり、右側のタイマーが3年以内に集中していれば、たとえP/Lが黒字であろうと、時限爆弾が先に作動して会社は爆発（倒産）する。
+
+\else
+\chapter{Physics of Temporal Horizons: Hierarchical Decomposition of Assets and Liabilities}
+\label{chap:time_horizon}
+
+Assets are countdown timers to liquidity; liabilities are redemption time-bombs.
+
+\section{Hierarchical Decomposition of Assets and Liabilities}
+\input{src/math/horizon_slicing.tex}
+
+\begin{itemize}
+    \item \textbf{Cash (0s):} Absolute liquidity. Ground state of settlement.
+    \item \textbf{Short-Term (1y):} Accounts receivable and inventory returning within normal operating cycles.
+    \item \textbf{Mid-Term (3y):} IT infrastructure, equipment, tooling. Rapid obsolescence demands full recovery within 3 years.
+    \item \textbf{Long-Term:} Real estate, patents, goodwill. Highly illiquid with multi-year exit frictions.
+\end{itemize}
+
+\section{The Three-Year Wall \& Debt Service Capability}
+Dynamic stability demands synchronous matching of liquidity horizons against repayment deadlines. If obligations mature inside 3 years while assets are locked in illiquid holdings, structural default becomes mathematically inevitable regardless of P/L profitability.
+\fi

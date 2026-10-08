@@ -1,0 +1,118 @@
+\ifja
+\appendix
+\chapter{記号体系および概念用語集}
+\label{chap:symbols_and_glossary}
+
+本章では、本書において従来の曖昧な簿記用語を解体し、第一原理および状態空間モデルとして再定義した数学記号・略号・主要概念の定義を提示する。
+
+\section{数理記号および状態変数一覧}
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llp{9.5cm}}
+\toprule
+\textbf{記号} & \textbf{次元 / 種別} & \textbf{物理的・代数的定義} \\
+\midrule
+$V$ & 集合 & 会計取引グラフにおけるノード（勘定科目）の全体集合。 \\
+$I_e(v)$ & フロー $[\text{JPY}]$ & 取引イベント $e$ におけるノード $v$ への代数流入量（流入を正、流出を負とする）。 \\
+$\text{Assets}$ & ストック $[\text{JPY}]$ & 資産総額。将来の現金化ポテンシャルを有する保有資源の空間。 \\
+$\text{Liabilities}$ & ストック $[\text{JPY}]$ & 負債総額。将来の外部流出義務を負う時限的債務の空間。 \\
+$\text{Equity}_t$ & ストック $[\text{JPY}]$ & 時刻 $t$ における純資産（資本主権）。システムの歴史的余剰の累積蓄積量。 \\
+$\text{Cash}$ & ストック $[\text{JPY}]$ & 現金および即時決済性預金。流動性変換時間 $\tau = 0$ の基底状態。 \\
+$\text{NonCash}$ & ストック $[\text{JPY}]$ & 非現金資産（$\text{Assets} - \text{Cash}$）。流動性制約を受ける束縛状態。 \\
+$\text{Profit}$ & フロー $[\text{JPY}/\text{period}]$ & 期間利益（$\text{Revenues} - \text{Expenses}$）。純資産レジスタへの階差流入量。 \\
+$\text{Rev}_t, \text{Exp}_t$ & フロー $[\text{JPY}/\text{period}]$ & 期間 $(t-1, t]$ における収益および費用の発生総量。期末に初期化される揮発性変数。 \\
+$\text{Net Debt}$ & ストック $[\text{JPY}]$ & 純有利子負債。$(\text{Short-Term Debt} + \text{Mid-Term Debt}) - \text{Cash}$。 \\
+$PV_{\text{annuity}}$ & スカラー $[\text{JPY}]$ & 将来キャッシュフロー列の割引現在価値の総和（年金現価）。 \\
+\bottomrule
+\end{tabular}
+\caption{本体系における数理記号および状態変数}
+\end{table}
+
+\section{略号・勘定コンポーネント対応表}
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llllp{6.8cm}}
+\toprule
+\textbf{略号} & \textbf{原語（英語）} & \textbf{伝統的呼称} & \textbf{時間階層} & \textbf{第一原理による機能的定義} \\
+\midrule
+\textbf{Cash} & Cash \& Equivalents & 現金預金 & 即時（$0$ 秒） & 決済拒絕不能な絶対基底。流動性摩擦ゼロ。 \\
+\textbf{AR} & Accounts Receivable & 売掛金 & 1年流動 & 履行完了済み・未回収の運転資本請求権。 \\
+\textbf{Inv} & Inventory & 棚卸資産 & 1年流動 & 販売・請求・入金待ちの営業サイクル滞留資産。 \\
+\textbf{AP} & Accounts Payable & 買掛金・未払金 & 1年短期 & 営業サイクルに伴う短期決済義務。 \\
+\textbf{COGS} & Cost of Goods Sold & 売上原価 & 期間フロー & 売上創出に直接消費された棚卸資産の費用化分。 \\
+\textbf{Mid-Term} & Mid-Term Assets & 中期固定資産 & 3年投資 & 3年以内に創出CFで完全回収・減価すべき設備/IT。 \\
+\textbf{Accrued} & Accrued Expenses & 未払費用 & 短期 & 役務提供済み・支払期日未到来の継続的債務。 \\
+\textbf{NWC} & Net Working Capital & 正味運転資本 & 1年流動 & $(\text{AR} + \text{Inv}) - \text{AP}$。事業維持に拘束される純資金。 \\
+\bottomrule
+\end{tabular}
+\caption{略号体系と時間階層}
+\end{table}
+
+\section{重要概念の再定義用語集}
+\begin{description}[leftmargin=3.5cm, style=nextline]
+    \item[KCL（キルヒホッフ則）整合性 / Kirchhoff's Current Law Consistency]
+    \mbox{}\\
+    複式簿記の本質的要件。各取引イベントにおいて、全科目の増減代数和が厳密に $\sum I_e(v) = 0$ となる保存則。「借方」「貸方」の左右暗記を排し、流入量（$+I$）と流出量（$-I$）の対称性として記述される。
+    \item[時間軸スライシング（Horizon Slicing）]
+    \mbox{}\\
+    資産・負債を科目分類ではなく「現金化までの残り時間（回収カウントダウン）」および「返済義務までの残り時間（返済時限爆弾）」の速度階層（即時、1年、3年、超長期）によって垂直にスライスし、同期性を監視・照合する構造設計論。
+    \item[3年の壁（Three-Year Horizon Wall）]
+    \mbox{}\\
+    技術・設備の急速な陳腐化サイクルにおいて、中期投資（PC・サーバー・内装・知財）は3年以内の創出キャッシュで回収し尽くさねばならず、かつ中期債務は年間CFの3倍以内（$\text{債務償還年数} \le 3.0$）で完済できなければ倒産リスクが指数関数的に増大するという動的安定限界。
+    \item[しーくりくりし（Periodic Calibration Patch）]
+    \mbox{}\\
+    期中に購入全額を費用プール（仕入）へ無差別に計上するという運用の手抜き（簡略化）によって生じる「期首ストックの未算入」および「期末ストックの費用混入」という2大歪みを、期末棚卸値によって一括復元・補正する2段階パッチ処理。
+    \item[決算締め（Closing / Register Reset）]
+    \mbox{}\\
+    揮発性レジスタであるP/Lの収益・費用フローをゼロクリアし、その代数階差 $\Delta \text{Equity} = \text{Rev} - \text{Exp}$ を不揮発性ストレージであるB/Sの純資産（繰越利益剰余金）レジスタへ転記・合流させる離散時間ステップ遷移操作。
+    \item[PTA（Plain Text Accounting）]
+    \mbox{}\\
+    財務トランザクションをGUIやSaaSの独自バイナリ/RDBMSではなく、バージョン管理（Git）可能な構造化プレーンテキスト（\texttt{.journal}）として保持・追記し、POSIXパイプラインやCLIツール（\texttt{hledger}）によって決定論的・再現性確実に出力・検算する主権奪還型の手法。
+\end{description}
+
+\else
+\appendix
+\chapter{Mathematical Symbols and System Glossary}
+\label{chap:symbols_and_glossary}
+
+\section{State Variables and Algebraic Dimensions}
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llp{9.5cm}}
+\toprule
+\textbf{Symbol} & \textbf{Dimension / Type} & \textbf{Algebraic Definition} \\
+\midrule
+$V$ & Set & Universal set of transaction nodes (accounts). \\
+$I_e(v)$ & Flow $[\text{JPY}]$ & Signed algebraic flow entering node $v$ for event $e$. \\
+$\text{Assets}$ & Stock $[\text{JPY}]$ & Total capacity space possessing future cash-conversion potential. \\
+$\text{Liabilities}$ & Stock $[\text{JPY}]$ & Obligation manifold requiring future liquid outflows. \\
+$\text{Equity}_t$ & Stock $[\text{JPY}]$ & Accumulated sovereign surplus at discrete step $t$. \\
+$\text{Cash}$ & Stock $[\text{JPY}]$ & Base liquidity reserve state ($\tau = 0$). \\
+$\text{NonCash}$ & Stock $[\text{JPY}]$ & Bound assets subject to temporal frictions ($\text{Assets} - \text{Cash}$). \\
+$\text{Profit}$ & Flow $[\text{JPY}/\text{period}]$ & Differential throughput ($\text{Revenues} - \text{Expenses}$). \\
+$\text{Net Debt}$ & Stock $[\text{JPY}]$ & $(\text{Short-Term Debt} + \text{Mid-Term Debt}) - \text{Cash}$. \\
+$PV_{\text{annuity}}$ & Scalar $[\text{JPY}]$ & Present value summation of geometric cash flows. \\
+\bottomrule
+\end{tabular}
+\caption{Mathematical Notation and State Vectors}
+\end{table}
+
+\section{System Glossary}
+\begin{description}[leftmargin=3.5cm, style=nextline]
+    \item[KCL Consistency]
+    The conservation law requiring $\sum I_e(v) = 0$ across all transaction graphs. Replaces "Debit and Credit" with signed symmetrical flows.
+    \item[Horizon Slicing]
+    Vertical state-space decomposition of assets and liabilities according to liquidity velocities (0s, 1y, 3y, long-term).
+    \item[The Three-Year Horizon Wall]
+    The dynamic stability limit requiring mid-term capital investments to be redeemed within 3 years and debt repayment horizons $\le 3.0$ years.
+    \item[Calibration Patch ("Shi-Kuri-Kuri-Shi")]
+    The two-step difference patch recovering rigorous COGS from rough period-expense booking pools.
+    \item[Register Reset (Closing)]
+    The clearing of volatile P/L flow registers and difference transfer to the persistent B/S Equity register.
+    \item[Plain Text Accounting (PTA)]
+    Deterministic, Git-versioned plain-text ledger processing executed via POSIX pipelines and compiled Haskell engines (\texttt{hledger}).
+\end{description}
+\fi

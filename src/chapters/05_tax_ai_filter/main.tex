@@ -1,0 +1,77 @@
+\ifja
+\chapter{法規の防壁とAI述語フィルタ}
+\label{chap:tax_ai_filter}
+
+\section{会計上の費用と税務上の損金の非対称性}
+実務初心者が最も混乱するのは、「領収書を切って費用（P/L）に入れたのに、なぜ税金が減らないのか」という点である。
+\begin{itemize}
+    \item \textbf{会計の目的：} 企業の真の経営成績を投資家や債権者に報告すること（$\text{Profit} = \text{Rev} - \text{Exp}$）。
+    \item \textbf{税法の目的：} 国家が公平・画一的に税金を徴収すること（$\text{Income} = \text{Gross} - \text{Deductible}$）。
+\end{itemize}
+
+企業が勝手に支出を「全額経費だ」と主張しても、税務署は課税の公平性を守るためにフィルターをかける。これが\textbf{損金不算入（加算調整）}である。
+
+\input{src/math/tax_firewall.tex}
+
+\section{税理士法第52条のクリアランスと人間の役割}
+日本の税理士法第52条は、資格を持たない者が「個別具体的な税額計算や税務相談」を行うことを厳格に禁じている。したがって、本や研修で「この場合は経費になる、ならない」を指南することは法的に危険である。
+
+ここでの最適解は極めて明快である。
+\begin{rulebox}{主権者の役割分担}
+\begin{enumerate}
+    \item \textbf{人間が知るべきこと：} 「会計上の費用 $\neq$ 税法上の損金」という構造の存在と、交際費・役員給与・減価償却に罠があるという「急所の所在」のみを記憶する。
+    \item \textbf{AI（LLM）の役割：} 毎年のように改正される細かい数値基準（1人あたり1万円の飲食費判定基準など）の条文照会・事実整理を代行させる。
+    \item \textbf{税理士の役割：} AIがまとめた前提シートをもとに、最終的な法的押印・確認を行う。
+\end{enumerate}
+\end{rulebox}
+
+\section{AI照会用プロンプト述語フィルタ}
+読者がAIに投げるべき述語判定プロンプトの標準形を以下に提示する。
+
+\begin{calcbox}{AI税務照会用プロンプト・テンプレート}
+\small\ttfamily
+【前提条件】\\
+- 法人規模：資本金3,000万円の中小法人（単一年度）\\
+- 経理方式：税抜経理方式\\
+- 支出内容：社外クライアント2名、社内役員1名による飲食懇談\\
+- 支出総額：税込 33,000 円\\
+\\
+【照会指示】\\
+1. 租税特別措置法（交際費等の損金不算入）の現行条文に基づき、本支出が「1人あたり10,000円以下の飲食費」として損金算入の除外要件を満たすか判定せよ。\\
+2. 税抜・税込の判定基準、および損金算入のために会社側で保存すべき必須記載事項（書類要件）を箇条書きで示せ。\\
+3. 税務調査において否認リスクとなり得る留意点を挙げよ。
+\end{calcbox}
+
+\else
+\chapter{Statutory Firewalls and AI Predicate Filters}
+\label{chap:tax_ai_filter}
+
+\section{Asymmetry Between Accounting Expense and Tax Deductibility}
+Accounting measures true economic performance; statutory tax codes enforce uniform sovereign collections. 
+
+\input{src/math/tax_firewall.tex}
+
+\section{Clearance of Legal Restrictions and Human Roles}
+Statutory regulations frequently reserve explicit tax advice to certified guilds. The optimal separation of sovereign autonomy is:
+\begin{rulebox}{Sovereign Division of Labor}
+\begin{enumerate}
+    \item \textbf{Human Architect:} Understand the structural mismatch ($\text{Accounting Expense} \neq \text{Tax Deductible}$) and identify hazard boundaries.
+    \item \textbf{AI Query Engine:} Query fast-evolving statutory thresholds and compile factual checklists.
+    \item \textbf{Certified Tax Attorney:} Validate organized fact sheets for final statutory filing.
+\end{enumerate}
+\end{rulebox}
+
+\section{Prompt Predicate Template}
+\begin{calcbox}{AI Tax Predicate Query Template}
+\small\ttfamily
+[Premise]\\
+- Entity: Small/Mid Corporate Entity (Single Period)\\
+- Accounting: Net Tax Basis\\
+- Event: Dinner with 2 clients and 1 internal executive (Total: 33,000 JPY incl. tax)\\
+{}\\
+{[Directive]}\\
+1. Evaluate whether this expense satisfies the statutory threshold per attendee for deductible entertainment expenses.\\
+2. State documentation requirements for substantiation.\\
+3. Identify potential tax-audit risk vectors.
+\end{calcbox}
+\fi

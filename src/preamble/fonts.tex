@@ -1,14 +1,15 @@
 \usepackage{fontspec}
+
 \ifja
   \usepackage[japanese, bidi=basic, provide=*]{babel}
   \babelprovide[import, onchar=ids fonts]{japanese}
   \babelprovide[import, onchar=ids fonts]{english}
   \babelfont{rm}{Noto Sans}
   \babelfont[japanese]{rm}{Noto Sans CJK JP}
-  \babelfont{tt}{Noto Sans}
-  \babelfont[japanese]{tt}{Noto Sans CJK JP}
+  \babelfont{tt}{Noto Sans Mono}
+  \babelfont[japanese]{tt}{Noto Sans Mono CJK JP}
 \else
+  % 英語版: 外部フォント指定を外し、TeX Live標準の欧文フォントに任せる（エラー回避）
   \usepackage[english]{babel}
-  \setmainfont{DejaVu Sans}
-  \setmonofont{DejaVu Sans Mono}
+  \defaultfontfeatures{Ligatures=TeX}
 \fi

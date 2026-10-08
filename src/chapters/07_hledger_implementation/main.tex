@@ -1,0 +1,113 @@
+\ifja
+\chapter{主権者の実装：Mac + nano + hledger パイプライン}
+\label{chap:hledger_implementation}
+
+重厚で不透明なクラウド会計のGUIを捨てよ。テキストファイル1枚とPOSIXパイプラインがあれば、企業の財務状態は完全に掌握できる。
+
+\section{時間軸タグ付きジャーナル設計}
+プレーンテキスト会計（Plain Text Accounting）の標準フォーマットを採用し、勘定科目名ではなく\textbf{メタデータタグ（\texttt{horizon:}）}によって時間軸を定義する。
+
+\begin{terminalbox}{nano 2026.journal}
+; 2026年度 財務台帳（時間軸タグモデル）\\
+\\
+2026/01/10 * Apple Store\\
+\quad assets:midterm:equipment\qquad 300000 JPY \quad ; horizon:3y, capex:it\\
+\quad assets:cash:bank\qquad\qquad\quad -300000 JPY\\
+\\
+2026/02/01 * 株式会社A コンサルティング請求\\
+\quad assets:receivable:client\_a\quad\ 500000 JPY \quad ; horizon:1y\\
+\quad revenues:consulting\qquad\qquad -500000 JPY\\
+\\
+2026/03/01 * 日本政策金融公庫 設備資金借入\\
+\quad assets:cash:bank\qquad\qquad\quad 3000000 JPY\\
+\quad liabilities:debt:bank\_mid\quad -3000000 JPY \quad ; horizon:3y\\
+\\
+2026/03/15 * AWS インフラ利用料\\
+\quad expenses:cloud\qquad\qquad\quad\ 50000 JPY\\
+\quad assets:cash:bank\qquad\qquad\quad -50000 JPY
+\end{terminalbox}
+
+\section{時間軸バランスマッチングのワンライナー}
+ターミナルで次のコマンドを実行するだけで、3年の壁が即座に可視化される。
+
+\begin{terminalbox}{\$ hledger balance tag:horizon}
+\phantom{-}300000 JPY \quad horizon:3y (資産: 中期設備投資)\\
+-3000000 JPY \quad horizon:3y (負債: 3年以内償還借入)\\
+--------------------------------------------------\\
+-2700000 JPY \quad Net 3年返済義務（純負債ギャップ）
+\end{terminalbox}
+
+「3年以内に返済すべき債務300万円に対し、3年で回収すべき設備は30万円しかない。差額270万円のキャッシュフローを本業でどう生み出すか？」という極めて本質的な経営の問いが、黒い画面に白文字で突きつけられる。
+
+\section{CLIによる完全自動Closing}
+期末の決算締めも、GUIのボタンを何回もクリックする必要はない。\texttt{hledger close} コマンド1発で、P/Lのゼロクリアと純資産への合流が物理的に実行される。
+
+\begin{terminalbox}{\$ hledger close --retain --close-date 2026-12-31 -f 2026.journal}
+2026/12/31 * closing balances\\
+\quad expenses:cloud\qquad\qquad\ -50000 JPY \quad ; P/L費用勘定をマイナス相殺してゼロ化\\
+\quad revenues:consulting\qquad\ 500000 JPY \quad ; P/L収益勘定をプラス相殺してゼロ化\\
+\quad equity:retained\_earnings\ -450000 JPY \quad ; 差額（利益45万円）をB/S純資産へ合流
+\end{terminalbox}
+
+\section{教育オペレーションと環境構築の経済学}
+本手法を企業研修やワークショップとして提供する場合、Mac標準環境（ターミナルと \texttt{nano}）のみを要件とし、次のような受講プロトコルを敷く。
+
+\begin{rulebox}{研修受講プロトコル}
+\begin{itemize}
+    \item \textbf{事前受講要件：} 高校数学の「一次方程式」および「等比数列・漸化式」を理解していること。
+    \item \textbf{受講環境：} 自身のMacを持参し、事前配布の3行コマンド（\texttt{brew install hledger} 等）を実行して動作確認しておくこと。
+    \item \textbf{ペナルティ・プライシング：} 事前準備を怠り、会場で講師に環境構築代行を依頼する場合は\textbf{一律20,000円（税別）}の作業料を徴収する。
+\end{itemize}
+\end{rulebox}
+
+「自分でやれば5分で無料、人に丸投げするなら2万円」という明確な境界線を引くことで、受講者の当事者意識を高め、講義当日の環境構築トラブルによる遅延を完全に排除できる。
+
+\else
+\chapter{Sovereign Implementation: POSIX + hledger Pipeline}
+\label{chap:hledger_implementation}
+
+Maintain complete operational sovereignty by discarding bloated SaaS GUIs in favor of version-controlled plain text and POSIX pipelines.
+
+\section{Horizon-Tagged Journal Architecture}
+Define temporal horizons via metadata tags (\texttt{horizon:}) rather than fragile account hierarchies.
+
+\begin{terminalbox}{nano 2026.journal}
+; Sovereign General Ledger 2026\\
+2026/01/10 * Apple Store\\
+\quad assets:midterm:equipment\qquad 300000 JPY \quad ; horizon:3y, capex:it\\
+\quad assets:cash:bank\qquad\qquad\quad -300000 JPY\\
+\\
+2026/02/01 * Client A Consulting Invoice\\
+\quad assets:receivable:client\_a\quad\ 500000 JPY \quad ; horizon:1y\\
+\quad revenues:consulting\qquad\qquad -500000 JPY\\
+\\
+2026/03/01 * Bank Facility Mid-Term Debt\\
+\quad assets:cash:bank\qquad\qquad\quad 3000000 JPY\\
+\quad liabilities:debt:bank\_mid\quad -3000000 JPY \quad ; horizon:3y
+\end{terminalbox}
+
+\section{One-Liner Horizon Balance Inspection}
+\begin{terminalbox}{\$ hledger balance tag:horizon}
+\phantom{-}300000 JPY \quad horizon:3y (Assets: Mid-Term Equipment)\\
+-3000000 JPY \quad horizon:3y (Liabilities: 3-Year Debt Obligation)\\
+--------------------------------------------------\\
+-2700000 JPY \quad Net 3-Year Debt Gap
+\end{terminalbox}
+
+\section{Deterministic CLI Closing}
+\begin{terminalbox}{\$ hledger close --retain --close-date 2026-12-31 -f 2026.journal}
+2026/12/31 * closing balances\\
+\quad expenses:cloud\qquad\qquad\ -50000 JPY \quad ; P/L expense reset\\
+\quad revenues:consulting\qquad\ 500000 JPY \quad ; P/L revenue reset\\
+\quad equity:retained\_earnings\ -450000 JPY \quad ; Net difference transferred to B/S
+\end{terminalbox}
+
+\section{Operational Protocol and Deployment Economics}
+\begin{rulebox}{Training Deployment Protocol}
+\begin{itemize}
+    \item \textbf{Prerequisites:} Fluency in high-school linear equations and basic recurrence relations.
+    \item \textbf{Runtime Environment:} Native macOS terminal and verified \texttt{brew install hledger} execution.
+    \item \textbf{Penalty Pricing:} Attendees requesting manual on-site environment setup are charged an explicit surcharge of \textbf{20,000 JPY}.
+\end{itemize}
+\end{rulebox}
+\fi

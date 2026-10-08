@@ -1,0 +1,36 @@
+\ifja
+\chapter{Closing（決算締め）の離散時間モデル}
+\label{chap:closing_model}
+
+簿記教育で神秘化される「損益振替」の正体は、物理系における\textbf{「フロー用レジスタのゼロクリア」と「ストックへの階差合流」}という離散時間アルゴリズムにすぎない。
+
+\section{漸化式による純資産（Equity）の発展}
+会計期間 $t \in \{0, 1, 2, \dots\}$ を離散時間ステップと定義する。損益計算書（P/L）の要素である収益 $\text{Rev}_t$ と費用 $\text{Exp}_t$ は、区間 $(t-1, t]$ における流量（Flow）である。
+
+第 $t$ 期における純利益（Net Income）は階差として定義される。
+\input{src/math/closing_recurrence.tex}
+
+\section{物理的描像：砂時計と金庫}
+\begin{itemize}
+    \item \textbf{期中（$t-1 \to t$）：} 売上と費用の砂時計（P/L）に砂が堆積する。
+    \item \textbf{Closing（時刻 $t$）：} 砂時計の差分（利益）を測定し、会社の金庫（B/Sの $\text{Equity}$）に流し込む。その後、砂時計を反転・ゼロクリアして次期に備える。
+\end{itemize}
+
+P/Lは毎年破棄される揮発性メモリであり、B/Sは企業の全歴史を記録する不揮発性ストレージである。この境界線をリフレッシュする処理がClosingである。
+
+\else
+\chapter{Closing as a Discrete-Time Register Reset}
+\label{chap:closing_model}
+
+The mystified ritual of "closing accounts" is purely a discrete-time register clear and difference-accumulation cycle.
+
+\section{Recurrence Formulation of Equity Evolution}
+Let $t \in \{0, 1, 2, \dots\}$ denote discrete accounting periods. Net income over $(t-1, t]$ is defined as:
+\input{src/math/closing_recurrence.tex}
+
+\section{Physical Representation: Hourglass and Vault}
+\begin{itemize}
+    \item \textbf{During Period ($t-1 \to t$):} Sand accumulates in the volatile revenue and expense hourglass (P/L).
+    \item \textbf{Closing (Time $t$):} The difference (Net Income) is transferred to the non-volatile corporate vault (B/S Equity). The hourglass is zero-reset for the subsequent period.
+\end{itemize}
+\fi

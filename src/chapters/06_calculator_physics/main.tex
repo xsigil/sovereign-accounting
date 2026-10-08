@@ -1,0 +1,63 @@
+\ifja
+\chapter{電卓の物理学：ハードウェアレジスタによる即時検証}
+\label{chap:calculator_physics}
+
+AIやクラウドが存在する時代に、なぜ机の上の物理電卓を叩くのか。それは「計算するため」ではなく、\textbf{「AIや他人が出してきた数字の違和感を、3秒で直感的に検算・破壊するため」}である。
+
+\section{キー操作と内部バッファの挙動}
+実務電卓（CASIO/SHARP系）は、CPUの内部レジスタと直結した高効率なステートマシンである。
+\begin{itemize}
+    \item \textbf{C（Clear）/ CE（Clear Entry）}: 入力バッファのクリア。
+    \item \textbf{M+ / M-}: ディスプレイの表示値を独立アキュムレータ（$M$）に加算／減算。
+    \item \textbf{RM / CM（またはMRC）}: 独立メモリの読み出し（Recall）および初期化（Clear）。
+    \item \textbf{GT（Grand Total）}: 「$=$」キー押下によって確定された値を累積蓄積するシフトレジスタ。
+\end{itemize}
+
+\section{定数乗算・除算とGTの漸化式}
+実務電卓における連打操作は、等比数列およびその級数のハードウェア評価である。
+
+\input{src/math/calculator_physics.tex}
+
+\begin{calcbox}{定数計算による現在価値（PV）と年金現価の即時算定}
+将来キャッシュフロー $C$、割引率 $r$、期間 $n$ の年金現価合計：
+\textbf{キー操作手順：}
+\begin{enumerate}
+    \item $[AC]$ でクリア後、$[C] \div [1 + r] [=]$（第1期の現在価値がGTに加算）
+    \item $[=]$ を残り $(n-1)$ 回押下（各期の割引額が順次加算）
+    \item $[GT]$ を押下 $\to$ 年金現価の総和が一撃で表示される。
+\end{enumerate}
+\end{calcbox}
+
+\section{独立メモリによる会計方程式の解法}
+左辺の要素を $[M+]$、右辺の要素を $[M-]$ に次々と放り込み、最後に $[RM]$ を押す。表示が「$0$」になれば方程式は完璧に平衡している。差額が出た場合、その値こそが「帳簿の歪み（脱漏）」である。
+
+\else
+\chapter{Physics of the Calculator: Instant Hardware Register Verification}
+\label{chap:calculator_physics}
+
+We execute physical calculations not merely to compute, but to falsify discrepancies produced by third parties or LLMs within three seconds.
+
+\section{Key Operations and Internal Buffer Dynamics}
+Commercial desktop calculators operate as direct finite-state machines over CPU registers:
+\begin{itemize}
+    \item \textbf{C / CE}: Clear entry and input buffer reset.
+    \item \textbf{M+ / M-}: Add/subtract display value directly to independent accumulator ($M$).
+    \item \textbf{RM / CM}: Recall and clear the independent memory accumulator.
+    \item \textbf{GT (Grand Total)}: Accumulating shift register for committed "$=$" outputs.
+\end{itemize}
+
+\section{Constant Calculation and Recurrence Relations}
+\input{src/math/calculator_physics.tex}
+
+\begin{calcbox}{Instant Present Value (PV) Evaluation via Division Recurrence}
+Given recurring cash flow $C$, discount rate $r$, and horizon $n$:
+\begin{enumerate}
+    \item Press $[AC]$, then input $[C] \div [1 + r] [=]$ (Period 1 added to GT).
+    \item Press $[=]$ for the remaining $(n-1)$ iterations.
+    \item Press $[GT] \to$ The total $PV_{\text{annuity}}$ is evaluated instantly.
+\end{enumerate}
+\end{calcbox}
+
+\section{Solving the Accounting Equation via Independent Accumulators}
+Feed debit/application terms to $[M+]$ and credit/source terms to $[M-]$. Pressing $[RM]$ must yield exactly $0$. Any non-zero scalar explicitly reveals uncalibrated system leakage.
+\fi
