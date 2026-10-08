@@ -1,0 +1,21 @@
+# TeX auxiliary & log files
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+texput.log
+
+# Directory-level TeX caches
+src/**/*.aux
+src/**/*.log
+src/**/*.out
+src/**/*.toc
+
+# OS / Editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

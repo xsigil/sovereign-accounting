@@ -1,8 +1,584 @@
-\documentclass{ltjsbook}
-\usepackage{luatexja} % ltjclasses, ltjsclasses を使うときはこの行不要
-\usepackage[smartEllipses]{markdown}
-\begin{document}
-\include{src/chapters/01_introduction/main.tex}
-\include{src/chapters/05_throughput_phase_space//main.tex}
-\end{document}
+\documentclass[11pt, a4paper]{report}
+\usepackage[a4paper, top=25mm, bottom=25mm, left=20mm, right=20mm]{geometry}
+\usepackage{fontspec}
 
+\usepackage[japanese, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{japanese}
+\babelprovide[import, onchar=ids fonts]{english}
+
+\babelfont{rm}{Noto Sans}
+\babelfont[japanese]{rm}{Noto Sans CJK JP}
+\babelfont{tt}{Noto Sans}
+\babelfont[japanese]{tt}{Noto Sans CJK JP}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist[itemize]{label=--}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{calcbox}[1]{
+  colback=gray!5!white,
+  colframe=gray!60!black,
+  fonttitle=\bfseries,
+  title={#1},
+  arc=2mm,
+  breakable
+}
+
+\newtcolorbox{terminalbox}[1]{
+  colback=black!95!white,
+  coltext=green!90!white,
+  colframe=black!80!gray,
+  fonttitle=\bfseries\ttfamily,
+  fontupper=\small\ttfamily,
+  title={#1},
+  arc=1mm,
+  breakable
+}
+
+\newtcolorbox{rulebox}[1]{
+  colback=blue!3!white,
+  colframe=blue!50!black,
+  fonttitle=\bfseries,
+  title={#1},
+  arc=2mm,
+  breakable
+}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!70!black,
+  urlcolor=blue!80!black
+}
+
+\begin{document}
+
+\title{\Huge \textbf{会計の物理法則と主権の奪還}\\[4mm]
+\Large 第一原理、階層時間軸、そしてプレーンテキストCLIによる財務の完全掌握}
+\author{\textbf{システム論・工学設計派会計研究会}}
+\date{\today}
+\maketitle
+\tableofcontents
+\newpage
+
+% ==============================================================================
+% ==============================================================================
+\chapter{現代の欺瞞と主権の回復}
+\label{chap:introduction}
+
+\section{設計された認知的不協和}
+
+ソフトウェア工学や物理、数学に携わる技術者が、いわゆる「簿記」や「税務」の教科書を初めて開いたときに覚える激しい違和感と拒絶反応は、決して彼らの知性の欠如に起因するものではない。むしろ逆である。第一原理（First Principles）からの演繹、論理的一貫性、そして保存則の普遍性を信じる訓練を受けた健全な頭脳であるからこそ、そこに蔓延する「設計された不整合」にスタックオーバーフローを起こしているにすぎない。
+
+古くは中世イタリアの商人に起源を持つとされる複式簿記は、本来、代数的な保存則そのものであった。しかし現代の資本主義社会においてそれは、資格制度、士業ギルド、そして高額なサブスクリプションを課すクラウドSaaSベンダーによって幾重もの「認知的トラップ」で包囲され、神聖化されたブラックボックスへと改悪されてしまった。
+
+彼らは、技術者が論理的に世界を理解できないよう、意図的に次のような認知的拷問を仕掛けている。
+
+\begin{enumerate}
+    \item \textbf{対称性の意図的な破壊（「借方・貸方」の亡霊）：}\\
+    工学や物理において、ノードに対する流入と流出は単なる符号付きスカラー量（流入を $+I$、流出を $-I$）として定式化される。明治期に福澤諭吉らが「Debit / Credit」を「借方 / 貸方」と翻訳して以来、日本の教育現場では「借りたわけではないのに借方」「資産の増加は左だが負債の増加は右」という言語的・数学的に破綻した呪文の丸暗記を初心者に強要し続けている。これは概念の本質（符号保存則）を隠蔽し、学習者を迷宮に閉じ込めるための第一の障壁である。
+
+    \item \textbf{状態空間の不要な散乱（名詞による目眩まし）：}\\
+    10万円未満なら消耗品費、10万円以上30万円未満なら一括償却または少額減価償却資産、30万円以上なら固定資産台帳へ登録して耐用年数テーブルを参照……。これらは数学的には単なる金額と日付を入力とする「閾値判定関数（Step Function）」にすぎない。しかし業界はこれに夥しい名詞のラベルを貼り付け、例外パッチを継ぎ接ぎすることで、「専門家にしか扱えない高等技術」であるかのように演出している。
+
+    \item \textbf{キャッシュフローの神秘化（間接法の煙幕）：}\\
+    「利益が出ているのに現金がない（黒字倒産）」「営業キャッシュフローの計算には減価償却費を足し戻し、売掛金の増減を差し引き……」といった実務教育は、あたかもキャッシュフロー計算書（C/F）が既存の財務諸表とは独立した別個の魔術であるかのように喧伝する。しかしその実態は、資産空間における現金基底への単なる射影と移項代入にすぎない。手続きをわざわざ間接法という複雑な調整ステップで包囲し、本質的なスループットの把握を困難にさせている。
+
+    \item \textbf{恐怖の煽動と小作農化（Rent-seeking）：}\\
+    「少しでも間違えれば税務署に差し押さえられる」「法律は複雑怪奇だから素人が触るな」という恐怖を刷り込むことで、個人の主権を放棄させる。結果として技術者は、銀行口座の認証情報を怪しいクラウド家計簿に差し出し、重厚なWeb GUIの前で毎月小作料（月額サブスクリプション）を払い、画面上のボタンをポチポチと押すだけのデジタル小作農へと転落させられる。
+\end{enumerate}
+
+\section{第一原理への還元：キルヒホッフ則と方程式}
+
+この茶番劇の皮を剥ぎ取った後に残る真実は、高校の理数科目レベル（一次方程式と数列）の道具立てで完全に記述できる。
+
+\subsection{キルヒホッフの電流則（KCL）と同型の複式簿記}
+
+あらゆる会計取引の本質は、有向グラフにおけるノード（勘定科目）間のフロー保存則、すなわち\textbf{キルヒホッフの電流則（Kirchhoff's Current Law: KCL）}と同型である。
+
+任意の会計取引グラフにおけるノード集合を $V$、取引 $e$ におけるノード $v \in V$ への資金流入量を $I_e(v)$ と定義するとき、閉鎖系における総代数和は常にゼロとなる。
+
+\begin{equation}
+    \sum_{v \in V} I_e(v) = 0 \quad (\forall e)
+\end{equation}
+
+勘定科目の集合を頂点、資金の移動を有向枝とする閉鎖系において、出た分だけ入り、全体の代数和は常に厳密にゼロとなる。出納における「借方（左）」とは単なる $+I$（資金の運用・投下先）であり、「貸方（右）」とは単なる $-I$（資金の源泉・調達元）にすぎない。
+
+\subsection{キャッシュフロースループットの代数的演繹}
+
+キャッシュフロー計算書（C/F）という独立した怪物は存在しない。資産（$\text{Assets}$）を現金（$\text{Cash}$）と非現金資産（$\text{NonCash}$：売掛金、在庫、機材、不動産等）に直和分解するだけで、キャッシュの真の運動方程式は完全に演繹される。
+
+\begin{equation}
+    \text{Assets} = \text{Cash} + \text{NonCash} \implies \text{Cash} \equiv \text{Assets} - \text{NonCash}
+\end{equation}
+
+大域保存則より、純資産の増加分である利益 $\text{Profit} = \text{Revenues} - \text{Expenses}$ を用いて資産を書き換えると、
+
+\begin{equation}
+    \text{Assets} = \text{Profit} + \text{Liabilities} + \text{Equity}_0
+\end{equation}
+
+が成立する。これを現金スループットの式へ代入することにより、経営の究極の恒等式が得られる。
+
+\begin{equation}
+    \mathbf{\text{Cash} = \text{Profit} + \text{Liabilities} + \text{Equity}_0 - \text{NonCash}}
+\end{equation}
+
+微小期間の差分フロー（Throughput）を考えれば、
+
+\begin{equation}
+    \mathbf{\Delta \text{Cash} = \text{Profit} + \Delta \text{Liabilities} + \Delta \text{Equity} - \Delta \text{NonCash}}
+\end{equation}
+
+となる。「黒字倒産」の正体は、$\text{Profit} > 0$ であっても、非現金資産の膨張分（$\Delta \text{NonCash}$）が利益を上回った瞬間に $\Delta \text{Cash} < 0$ へ沈むという、単純な代数符号の逆転にすぎない。
+
+% ==============================================================================
+% ==============================================================================
+\chapter{呪文の終焉：「しーくりくりし」の代数構造}
+\label{chap:cost_of_goods_sold}
+
+日本の商業高校や簿記検定で受講生を脱落させる象徴が、「しーくりくりし（仕入・繰越商品・繰越商品・仕入）」という呪文である。本章では、この呪文を「期中の実務的手抜き（簡略化）を期末に補正するパッチ処理」として数式で解剖する。
+
+\section{期中の現実的な割り切りと歪み}
+
+理想的な厳密理論において、商品を購入した瞬間は資産（棚卸資産 $\text{Inventory}$）の増加であり、商品が1つ販売されるたびに資産から費用（売上原価 $\text{COGS}$）へ振り替えるべきである。
+
+\begin{equation}
+    \text{購入時:} \quad \Delta \text{Inventory} > 0, \quad \Delta \text{Cash} < 0
+\end{equation}
+\begin{equation}
+    \text{販売時:} \quad \Delta \text{COGS} > 0, \quad \Delta \text{Inventory} < 0
+\end{equation}
+
+しかし、旧来の小売店舗において商品が1個売れるごとに在庫台帳を引き落とし仕訳を切るのは非現実的であった。そのため実務は次のような「手抜き」を採用した。
+
+\begin{quote}
+\textit{「今期購入した商品は、とりあえず全額を当期の費用（仕入勘定 $P_{\text{current}}$）に放り込んでしまえ」}
+\end{quote}
+
+この乱暴な簡略化により、決算日を迎えた帳簿には必ず\textbf{2つの構造的歪み}が生じる。
+\begin{enumerate}
+    \item \textbf{期首在庫の未算入:} 前期から倉庫に引き継いだ資産 $\text{Inv}_{\text{begin}}$ が今期の費用勘定に含まれていない。
+    \item \textbf{期末在庫の過大費用化:} 当期に購入したが売れ残った資産 $\text{Inv}_{\text{end}}$ が費用の中に混入している。
+\end{enumerate}
+
+\section{方程式を復元する2段階のキャリブレーション}
+
+この2つの歪みを直し、会計方程式の均衡を復元するのが「しーくりくりし」の正体である。
+
+\subsection{Step 1: 前期ストックの費用プールへの合流（しーくり）}
+前期から持ち越された資産を減らし、今期の費用プール（仕入勘定）へ投入する。
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llrllr}
+\toprule
+\textbf{運用側（借方: 費用増）} & 金額 & \quad & \textbf{調達・資産減少側（貸方: 資産減）} & 金額 \\
+\midrule
+仕入（費用） & $\text{Inv}_{\text{begin}}$ 円 & & 繰越商品（資産） & $\text{Inv}_{\text{begin}}$ 円 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Step 2: 売れ残りの資産退避（くりし）}
+期末に倉庫を実地棚卸しし、残存した商品を費用プールから控除して次期への資産として退避させる。
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llrllr}
+\toprule
+\textbf{運用側（借方: 資産増）} & 金額 & \quad & \textbf{調達・費用取消側（貸方: 費用減）} & 金額 \\
+\midrule
+繰越商品（資産） & $\text{Inv}_{\text{end}}$ 円 & & 仕入（費用） & $\text{Inv}_{\text{end}}$ 円 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{売上原価の恒等式}
+
+以上の2段階パッチによって、仕入勘定の残高は当初の購入額総和から、厳密な売上原価へと収束する。
+
+\begin{equation}
+    \mathbf{\text{COGS} = \text{Inv}_{\text{begin}} + P_{\text{current}} - \text{Inv}_{\text{end}}}
+\end{equation}
+
+呪文の暗記は不要である。「期中に全額費用として雑に扱ったプールに対し、期首ストックを足し、期末ストックを引いて、真の消費量（フロー）を取り出す」という単純な差分操作にすぎない。
+
+% ==============================================================================
+% ==============================================================================
+\chapter{時間軸の物理学：AssetとLiabilitiesの階層的分解}
+\label{chap:time_horizon}
+
+B/Sの左（資産）と右（負債）を無機質な勘定科目リストとして記憶してはならない。資産とは\textbf{「現金への変身カウントダウンタイマー」}であり、負債とは\textbf{「現金を奪う時限爆弾」}である。
+
+\section{資産（Asset）の階層的分解式}
+
+すべての資産は、現金化・回収までの「時間制限」によって次のように分解される。
+
+\begin{equation}
+    \text{Asset} = \text{Cash} + \text{NonCash}
+\end{equation}
+
+ここで $\text{NonCash}$ を回収速度に応じて厳密に3層に階層化する。
+
+\begin{equation}
+    \mathbf{\text{Asset} = \text{Cash} + \underbrace{\text{AR} + \text{Inv}}_{\text{1年流動（運転資本）}} + \underbrace{\text{Mid-Term}}_{\text{3年投資（IT/設備）}} + \underbrace{\text{RealEstate} + \text{Intangibles}}_{\text{長期・固定（不動産/のれん）}}}
+\end{equation}
+
+\begin{itemize}
+    \item \textbf{Cash（即時：0秒）:} 究極の流動性。いかなる決済も拒絶されない基底状態。
+    \item \textbf{短期1年流動（$\text{AR} + \text{Inv}$）:} 売掛金および在庫。日々の営業サイクルで1年以内に現金へ戻る運転資本。
+    \item \textbf{中期3年投資（$\text{Mid-Term}$）：} PC、サーバー、小規模設備、内装、ソフトウェア。陳腐化が極めて速く、\textbf{3年以内の創出キャッシュで回収し尽くすべき}資産。
+    \item \textbf{長期固定（$\text{RealEstate} + \text{Intangibles}$）：} 土地、建物、知財、M\&A時の買収プレミアム（のれん）。10年以上の超長期で拘束され、即座の換金性は絶望的である。
+\end{itemize}
+
+\section{負債（Liabilities）の階層的分解式}
+
+負債側も全く同様に、返済期日（デッドライン）によって階層化される。
+
+\begin{equation}
+    \mathbf{\text{Liabilities} = \underbrace{\text{AP} + \text{Accrued}}_{\text{1年短期営業債務}} + \underbrace{\text{Short-Term Debt}}_{\text{1年内返済借入}} + \underbrace{\text{Mid-Term Debt}}_{\text{3年以内償還借入}} + \underbrace{\text{Long-Term Debt + Bonds}}_{\text{3年超長期負債}}}
+\end{equation}
+
+\section{時間軸マッチングの法則と「3年の壁」}
+
+経営の安定性とは、左右のカウントダウンタイマーの速度が同期しているか否かで決まる。
+
+\begin{equation}
+\begin{aligned}
+\text{左側（Asset: 現金化タイマー）} &\quad \longleftrightarrow \quad \text{右側（Liabilities: 返済時限爆弾）} \\
+\text{Cash（0秒）} &\quad \longleftrightarrow \quad \text{即時決済手形・未払金} \\
+\text{AR + Inv（1年）} &\quad \longleftrightarrow \quad \text{AP + 短期借入（1年）} \\
+\mathbf{\text{Mid-Term Assets（3年回収）}} &\quad \longleftrightarrow \quad \mathbf{\text{Mid-Term Debt（3年返済）}} \\
+\text{Real Estate / Intangibles（長期）} &\quad \longleftrightarrow \quad \text{Long-Term Debt + Equity（純資産）}
+\end{aligned}
+\end{equation}
+
+\subsection{純負債と債務償還年数の数式判定}
+
+企業の生存可能性を判定する黄金律は、手元の余剰現金を差し引いた純有利子負債（$\text{Net Debt}$）が、年間キャッシュフローの\textbf{3年分以内}に収まっているか否かである。
+
+\begin{equation}
+    \text{Net Debt} \equiv (\text{Short-Term Debt} + \text{Mid-Term Debt}) - \text{Cash}
+\end{equation}
+\begin{equation}
+    \mathbf{\text{債務償還年数} = \frac{\text{Net Debt}}{\text{営業利益} + \text{減価償却費}} \le 3.0 \quad [\text{年}]}
+\end{equation}
+
+もし左側が換金不能な不動産やのれんで埋まり、右側のタイマーが3年以内に集中していれば、たとえP/Lが黒字であろうと、時限爆弾が先に作動して会社は爆発（倒産）する。
+
+% ==============================================================================
+% ==============================================================================
+\chapter{Closing（決算締め）の離散時間モデル}
+\label{chap:closing_model}
+
+簿記教育で神秘化される「損益振替」の正体は、物理系における\textbf{「フロー用レジスタのゼロクリア」と「ストックへの階差合流」}という離散時間アルゴリズムにすぎない。
+
+\section{漸化式による純資産（Equity）の発展}
+
+会計期間 $t \in \{0, 1, 2, \dots\}$ を離散時間ステップと定義する。損益計算書（P/L）の要素である収益 $\text{Rev}_t$ と費用 $\text{Exp}_t$ は、区間 $(t-1, t]$ における流量（Flow）である。
+
+第 $t$ 期における純利益（Net Income）は階差として定義される。
+\begin{equation}
+    \Delta \text{Equity}_t \equiv \text{Rev}_t - \text{Exp}_t
+\end{equation}
+
+決算締め（Closing）とは、この階差をB/Sの純資産レジスタへ転記し、P/Lレジスタを初期化する漸化式そのものである。
+
+\begin{equation}
+    \mathbf{\text{Equity}_t = \text{Equity}_{t-1} + \Delta \text{Equity}_t}
+\end{equation}
+
+創業時の元入金（資本金）を $\text{Equity}_0$ と置けば、第 $n$ 期末の純資産は階差数列の総和として閉じた形式で表現される。
+
+\begin{equation}
+    \text{Equity}_n = \text{Equity}_0 + \sum_{k=1}^n (\text{Rev}_k - \text{Exp}_k)
+\end{equation}
+
+\section{物理的描像：砂時計と金庫}
+
+\begin{itemize}
+    \item \textbf{期中（$t-1 \to t$）：} 売上と費用の砂時計（P/L）に砂が堆積する。
+    \item \textbf{Closing（時刻 $t$）：} 砂時計の差分（利益）を測定し、会社の金庫（B/Sの $\text{Equity}$）に流し込む。その後、砂時計を反転・ゼロクリアして次期に備える。
+\end{itemize}
+
+P/Lは毎年破棄される揮発性メモリであり、B/Sは企業の全歴史を記録する不揮発性ストレージである。この境界線をリフレッシュする処理がClosingである。
+
+% ==============================================================================
+% ==============================================================================
+\chapter{法規の防壁とAI述語フィルタ}
+\label{chap:tax_ai_filter}
+
+\section{会計上の費用と税務上の損金の非対称性}
+
+実務初心者が最も混乱するのは、「領収書を切って費用（P/L）に入れたのに、なぜ税金が減らないのか」という点である。
+\begin{itemize}
+    \item \textbf{会計の目的：} 企業の真の経営成績を投資家や債権者に報告すること（$\text{Profit} = \text{Rev} - \text{Exp}$）。
+    \item \textbf{税法の目的：} 国家が公平・画一的に税金を徴収すること（$\text{Income} = \text{Gross} - \text{Deductible}$）。
+\end{itemize}
+
+企業が勝手に支出を「全額経費だ」と主張しても、税務署は課税の公平性を守るためにフィルターをかける。これが\textbf{損金不算入（加算調整）}である。
+
+\begin{equation}
+    \text{課税所得} = \text{当期純利益} + \sum \text{損金不算入額} - \sum \text{益金不算入額}
+\end{equation}
+
+\section{税理士法第52条のクリアランスと人間の役割}
+
+日本の税理士法第52条は、資格を持たない者が「個別具体的な税額計算や税務相談」を行うことを厳格に禁じている。したがって、本や研修で「この場合は経費になる、ならない」を指南することは法的に危険である。
+
+ここでの最適解は極めて明快である。
+\begin{rulebox}{主権者の役割分担}
+\begin{enumerate}
+    \item \textbf{人間が知るべきこと：} 「会計上の費用 $\neq$ 税法上の損金」という構造の存在と、交際費・役員給与・減価償却に罠があるという「急所の所在」のみを記憶する。
+    \item \textbf{AI（LLM）の役割：} 毎年のように改正される細かい数値基準（1人あたり1万円の飲食費判定基準など）の条文照会・事実整理を代行させる。
+    \item \textbf{税理士の役割：} AIがまとめた前提シートをもとに、最終的な法的押印・確認を行う。
+\end{enumerate}
+\end{rulebox}
+
+\section{AI照会用プロンプト述語フィルタ}
+
+読者がAIに投げるべき述語判定プロンプトの標準形を以下に提示する。
+
+\begin{calcbox}{AI税務照会用プロンプト・テンプレート}
+\small\ttfamily
+【前提条件】\\
+- 法人規模：資本金3,000万円の中小法人（単一年度）\\
+- 経理方式：税抜経理方式\\
+- 支出内容：社外クライアント2名、社内役員1名による飲食懇談\\
+- 支出総額：税込 33,000 円\\
+\\
+【照会指示】\\
+1. 租税特別措置法（交際費等の損金不算入）の現行条文に基づき、本支出が「1人あたり10,000円以下の飲食費」として損金算入の除外要件を満たすか判定せよ。\\
+2. 税抜・税込の判定基準、および損金算入のために会社側で保存すべき必須記載事項（書類要件）を箇条書きで示せ。\\
+3. 税務調査において否認リスクとなり得る留意点を挙げよ。
+\end{calcbox}
+
+このプロンプトを投げるだけで、最新の税制改正を反映した判定結果が数秒で手に入る。人間が分厚い税法条文を暗記する時代は完全に終わった。
+
+% ==============================================================================
+% ==============================================================================
+\chapter{電卓の物理学：ハードウェアレジスタによる即時検証}
+\label{chap:calculator_physics}
+
+AIやクラウドが存在する時代に、なぜ机の上の物理電卓を叩くのか。それは「計算するため」ではなく、\textbf{「AIや他人が出してきた数字の違和感を、3秒で直感的に検算・破壊するため」}である。
+
+\section{キー操作と内部バッファの挙動}
+実務電卓（CASIO/SHARP系）は、CPUの内部レジスタと直結した高効率なステートマシンである。
+
+\begin{itemize}
+    \item \textbf{C（Clear）/ CE（Clear Entry）}: 入力バッファのクリア。
+    \item \textbf{M+ / M-}: ディスプレイの表示値を独立アキュムレータ（$M$）に加算／減算。
+    \item \textbf{RM / CM（またはMRC）}: 独立メモリの読み出し（Recall）および初期化（Clear）。
+    \item \textbf{GT（Grand Total）}: 「$=$」キー押下によって確定された値を累積蓄積するシフトレジスタ。
+\end{itemize}
+
+\section{定数乗算・除算とGTの漸化式}
+
+実務電卓における連打操作は、等比数列およびその級数のハードウェア評価である。
+
+\subsection{定数除算による割引率の連打展開}
+入力シーケンス：$[a] \div [b] [=] [=] \dots [=]$
+\begin{align}
+    y_1 &= a \div b = \frac{a}{b} \\
+    y_2 &= a \div b^2 = \frac{a}{b^2} \\
+    &\;\;\vdots \nonumber \\
+    y_n &= a \div b^n = \frac{a}{b^n} \\
+    \text{GT}_n &= \sum_{i=1}^n \frac{a}{b^i}
+\end{align}
+
+\begin{calcbox}{定数計算による現在価値（PV）と年金現価の即時算定}
+将来キャッシュフロー $C$、割引率 $r$、期間 $n$ の年金現価合計：
+\begin{equation}
+    PV_{\text{annuity}} = \sum_{i=1}^n \frac{C}{(1+r)^i}
+\end{equation}
+\textbf{キー操作手順：}
+\begin{enumerate}
+    \item $[AC]$ でクリア後、$[C] \div [1 + r] [=]$（第1期の現在価値がGTに加算）
+    \item $[=]$ を残り $(n-1)$ 回押下（各期の割引額が順次加算）
+    \item $[GT]$ を押下 $\to$ 年金現価の総和が一撃で表示される。
+\end{enumerate}
+\end{calcbox}
+
+\section{独立メモリによる会計方程式の解法}
+
+拡張会計方程式：
+\begin{equation}
+    \underbrace{\text{Assets} + \text{Expenses}}_{\text{左側（運用）: } [M+]} = \underbrace{\text{Liabilities} + \text{Equity} + \text{Revenues}}_{\text{右側（調達）: } [M-]}
+\end{equation}
+
+左辺の要素を $[M+]$、右辺の要素を $[M-]$ に次々と放り込み、最後に $[RM]$ を押す。表示が「$0$」になれば方程式は完璧に平衡している。差額が出た場合、その値こそが「帳簿の歪み（脱漏）」である。
+
+% ==============================================================================
+% ==============================================================================
+\chapter{主権者の実装：Mac + nano + hledger パイプライン}
+\label{chap:hledger_implementation}
+
+重厚で不透明なクラウド会計のGUIを捨てよ。テキストファイル1枚とPOSIXパイプラインがあれば、企業の財務状態は完全に掌握できる。
+
+\section{時間軸タグ付きジャーナル設計}
+
+プレーンテキスト会計（Plain Text Accounting）の標準フォーマットを採用し、勘定科目名ではなく\textbf{メタデータタグ（\texttt{horizon:}）}によって時間軸を定義する。
+
+\begin{terminalbox}{nano 2026.journal}
+; 2026年度 財務台帳（時間軸タグモデル）\\
+\\
+2026/01/10 * Apple Store\\
+\quad assets:midterm:equipment\qquad 300000 JPY \quad ; horizon:3y, capex:it\\
+\quad assets:cash:bank\qquad\qquad\quad -300000 JPY\\
+\\
+2026/02/01 * 株式会社A コンサルティング請求\\
+\quad assets:receivable:client\_a\quad\ 500000 JPY \quad ; horizon:1y\\
+\quad revenues:consulting\qquad\qquad -500000 JPY\\
+\\
+2026/03/01 * 日本政策金融公庫 設備資金借入\\
+\quad assets:cash:bank\qquad\qquad\quad 3000000 JPY\\
+\quad liabilities:debt:bank\_mid\quad -3000000 JPY \quad ; horizon:3y\\
+\\
+2026/03/15 * AWS インフラ利用料\\
+\quad expenses:cloud\qquad\qquad\quad\ 50000 JPY\\
+\quad assets:cash:bank\qquad\qquad\quad -50000 JPY
+\end{terminalbox}
+
+\section{時間軸バランスマッチングのワンライナー}
+
+ターミナルで次のコマンドを実行するだけで、3年の壁が即座に可視化される。
+
+\begin{terminalbox}{\$ hledger balance tag:horizon}
+\phantom{-}300000 JPY \quad horizon:3y (資産: 中期設備投資)\\
+-3000000 JPY \quad horizon:3y (負債: 3年以内償還借入)\\
+--------------------------------------------------\\
+-2700000 JPY \quad Net 3年返済義務（純負債ギャップ）
+\end{terminalbox}
+
+「3年以内に返済すべき債務300万円に対し、3年で回収すべき設備は30万円しかない。差額270万円のキャッシュフローを本業でどう生み出すか？」という極めて本質的な経営の問いが、黒い画面に白文字で突きつけられる。
+
+\section{CLIによる完全自動Closing}
+
+期末の決算締めも、GUIのボタンを何回もクリックする必要はない。\texttt{hledger close} コマンド1発で、P/Lのゼロクリアと純資産への合流が物理的に実行される。
+
+\begin{terminalbox}{\$ hledger close --retain --close-date 2026-12-31 -f 2026.journal}
+2026/12/31 * closing balances\\
+\quad expenses:cloud\qquad\qquad\ -50000 JPY \quad ; P/L費用勘定をマイナス相殺してゼロ化\\
+\quad revenues:consulting\qquad\ 500000 JPY \quad ; P/L収益勘定をプラス相殺してゼロ化\\
+\quad equity:retained\_earnings\ -450000 JPY \quad ; 差額（利益45万円）をB/S純資産へ合流
+\end{terminalbox}
+
+\section{教育オペレーションと環境構築の経済学}
+
+本手法を企業研修やワークショップとして提供する場合、Mac標準環境（ターミナルと \texttt{nano}）のみを要件とし、次のような受講プロトコルを敷く。
+
+\begin{rulebox}{研修受講プロトコル}
+\begin{itemize}
+    \item \textbf{事前受講要件：} 高校数学の「一次方程式」および「等比数列・漸化式」を理解していること。
+    \item \textbf{受講環境：} 自身のMacを持参し、事前配布の3行コマンド（\texttt{brew install hledger} 等）を実行して動作確認しておくこと。
+    \item \textbf{ペナルティ・プライシング：} 事前準備を怠り、会場で講師に環境構築代行を依頼する場合は\textbf{一律20,000円（税別）}の作業料を徴収する。
+\end{itemize}
+\end{rulebox}
+
+「自分でやれば5分で無料、人に丸投げするなら2万円」という明確な境界線を引くことで、受講者の当事者意識を高め、講義当日の環境構築トラブルによる遅延を完全に排除できる。
+
+% ==============================================================================
+% ==============================================================================
+\chapter*{結び：主権者のためのマニフェスト}
+\addcontentsline{toc}{chapter}{結び：主権者のためのマニフェスト}
+
+会計とは、国家や士業ギルドが作った難解な教義ではない。入った分と出た分の代数和がゼロになるという、キルヒホッフの電流則と同型の「物理法則」である。
+
+\begin{enumerate}
+    \item 借方・貸方の言葉を捨てよ。左は現金化タイマー、右は返済時限爆弾である。
+    \item 「しーくりくりし」は、期中の手抜きを等式に戻すパッチにすぎない。
+    \item 1年・3年・長期の時間軸で資産と負債をスライスし、爆弾が爆発する前に現金へ戻せ。
+    \item 毎年の税法変更や仕訳作業はAIに丸投げし、人間は電卓で比率の違和感を叩け。
+    \item 財務の全ログをGitとプレーンテキストで手元に保持し、真の主権を奪還せよ。
+\end{enumerate}
+
+この5つの原則を手にしたとき、あなたはもはやGUIの奴隷でも、資格スクールの顧客でもない。自らの事業の命運を第一原理から操る、真のアーキテクトとなる。
+
+% ==============================================================================
+% ==============================================================================
+\appendix
+\chapter{記号体系および概念用語集}
+\label{chap:symbols_and_glossary}
+
+本章では、本書において従来の曖昧な簿記用語を解体し、第一原理および状態空間モデルとして再定義した数学記号・略号・主要概念の定義を提示する。
+
+\section{数理記号および状態変数一覧}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llp{9.5cm}}
+\toprule
+\textbf{記号} & \textbf{次元 / 種別} & \textbf{物理的・代数的定義} \\
+\midrule
+$V$ & 集合 & 会計取引グラフにおけるノード（勘定科目）の全体集合。 \\
+$I_e(v)$ & フロー $[\text{JPY}]$ & 取引イベント $e$ におけるノード $v$ への代数流入量（流入を正、流出を負とする）。 \\
+$\text{Assets}$ & ストック $[\text{JPY}]$ & 資産総額。将来の現金化ポテンシャルを有する保有資源の空間。 \\
+$\text{Liabilities}$ & ストック $[\text{JPY}]$ & 負債総額。将来の外部流出義務を負う時限的債務の空間。 \\
+$\text{Equity}_t$ & ストック $[\text{JPY}]$ & 時刻 $t$ における純資産（資本主権）。システムの歴史的余剰の累積蓄積量。 \\
+$\text{Cash}$ & ストック $[\text{JPY}]$ & 現金および即時決済性預金。流動性変換時間 $\tau = 0$ の基底状態。 \\
+$\text{NonCash}$ & ストック $[\text{JPY}]$ & 非現金資産（$\text{Assets} - \text{Cash}$）。流動性制約を受ける束縛状態。 \\
+$\text{Profit}$ & フロー $[\text{JPY}/\text{period}]$ & 期間利益（$\text{Revenues} - \text{Expenses}$）。純資産レジスタへの階差流入量。 \\
+$\text{Rev}_t, \text{Exp}_t$ & フロー $[\text{JPY}/\text{period}]$ & 期間 $(t-1, t]$ における収益および費用の発生総量。期末に初期化される揮発性変数。 \\
+$\text{Net Debt}$ & ストック $[\text{JPY}]$ & 純有利子負債。$(\text{Short-Term Debt} + \text{Mid-Term Debt}) - \text{Cash}$。 \\
+$PV_{\text{annuity}}$ & スカラー $[\text{JPY}]$ & 将来キャッシュフロー列の割引現在価値の総和（年金現価）。 \\
+\bottomrule
+\end{tabular}
+\caption{本体系における数理記号および状態変数}
+\end{table}
+
+\section{略号・勘定コンポーネント対応表}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{llllp{6.8cm}}
+\toprule
+\textbf{略号} & \textbf{原語（英語）} & \textbf{伝統的呼称} & \textbf{時間階層} & \textbf{第一原理による機能的定義} \\
+\midrule
+\textbf{Cash} & Cash \& Equivalents & 現金預金 & 即時（$0$ 秒） & 決済拒絕不能な絶対基底。流動性摩擦ゼロ。 \\
+\textbf{AR} & Accounts Receivable & 売掛金 & 1年流動 & 履行完了済み・未回収の運転資本請求権。 \\
+\textbf{Inv} & Inventory & 棚卸資産 & 1年流動 & 販売・請求・入金待ちの営業サイクル滞留資産。 \\
+\textbf{AP} & Accounts Payable & 買掛金・未払金 & 1年短期 & 営業サイクルに伴う短期決済義務。 \\
+\textbf{COGS} & Cost of Goods Sold & 売上原価 & 期間フロー & 売上創出に直接消費された棚卸資産の費用化分。 \\
+\textbf{Mid-Term} & Mid-Term Assets & 中期固定資産 & 3年投資 & 3年以内に創出CFで完全回収・減価すべき設備/IT。 \\
+\textbf{Accrued} & Accrued Expenses & 未払費用 & 短期 & 役務提供済み・支払期日未到来の継続的債務。 \\
+\textbf{NWC} & Net Working Capital & 正味運転資本 & 1年流動 & $(\text{AR} + \text{Inv}) - \text{AP}$。事業維持に拘束される純資金。 \\
+\bottomrule
+\end{tabular}
+\caption{略号体系と時間階層}
+\end{table}
+
+\section{重要概念の再定義用語集}
+
+\begin{description}[leftmargin=3.5cm, style=nextline]
+
+    \item[KCL（キルヒホッフ則）整合性 / Kirchhoff's Current Law Consistency]
+    \mbox{}\\
+    複式簿記の本質的要件。各取引イベントにおいて、全科目の増減代数和が厳密に $\sum I_e(v) = 0$ となる保存則。「借方」「貸方」の左右暗記を排し、流入量（$+I$）と流出量（$-I$）の対称性として記述される。
+
+    \item[時間軸スライシング（Horizon Slicing）]
+    \mbox{}\\
+    資産・負債を科目分類ではなく「現金化までの残り時間（回収カウントダウン）」および「返済義務までの残り時間（返済時限爆弾）」の速度階層（即時、1年、3年、超長期）によって垂直にスライスし、同期性を監視・照合する構造設計論。
+
+    \item[3年の壁（Three-Year Horizon Wall）]
+    \mbox{}\\
+    技術・設備の急速な陳腐化サイクルにおいて、中期投資（PC・サーバー・内装・知財）は3年以内の創出キャッシュで回収し尽くさねばならず、かつ中期債務は年間CFの3倍以内（$\text{債務償還年数} \le 3.0$）で完済できなければ倒産リスクが指数関数的に増大するという動的安定限界。
+
+    \item[しーくりくりし（Periodic Calibration Patch）]
+    \mbox{}\\
+    期中に購入全額を費用プール（仕入）へ無差別に計上するという運用の手抜き（簡略化）によって生じる「期首ストックの未算入」および「期末ストックの費用混入」という2大歪みを、期末棚卸値によって一括復元・補正する2段階パッチ処理。
+
+    \item[決算締め（Closing / Register Reset）]
+    \mbox{}\\
+    揮発性レジスタであるP/Lの収益・費用フローをゼロクリアし、その代数階差 $\Delta \text{Equity} = \text{Rev} - \text{Exp}$ を不揮発性ストレージであるB/Sの純資産（繰越利益剰余金）レジスタへ転記・合流させる離散時間ステップ遷移操作。
+
+    \item[PTA（Plain Text Accounting）]
+    \mbox{}\\
+    財務トランザクションをGUIやSaaSの独自バイナリ/RDBMSではなく、バージョン管理（Git）可能な構造化プレーンテキスト（\texttt{.journal}）として保持・追記し、POSIXパイプラインやCLIツール（\texttt{hledger}）によって決定論的・再現性確実に出力・検算する主権奪還型の手法。
+
+\end{description}
+
+\end{document}

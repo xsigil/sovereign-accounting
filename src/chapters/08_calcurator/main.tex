@@ -1,0 +1,137 @@
+\chapter{電卓の使い方}
+\section{キー操作と内部バッファの挙動}
+一般的な実務電卓（主にCASIO系仕様）において、四則演算キー押下後に数値を確定し連打入力を行うことで「定数計算（Constant Calculation）」が有効化される。
+
+\begin{itemize}
+    \item \textbf{C（All Clear / Clear）}: 全レジスタおよび演算状態を初期化（独立メモリは保持される場合がある）。
+    \item \textbf{CE（Clear Entry）}: 直前に入力した数値バッファのみを取り消し、演算途中の状態を保持。
+    \item \textbf{M+ / M-}: ディスプレイの表示値を独立メモリに加算／減算。
+    \item \textbf{RM / CM（またはMRC）}: 独立メモリの読み出し（Recall Memory）およびクリア（Clear Memory）。
+    \item \textbf{GT（Grand Total）}: 「$=$」キー押下によって確定された計算結果を順次累積加算するレジスタ。
+\end{itemize}
+
+\section{定数乗算・除算・パーセントの漸化式}
+実務電卓における連打操作は、以下の等比数列およびその級数（GTレジスタ）の評価としてモデル化できる。
+
+\subsection{定数乗算の数式定義}
+入力シーケンス：$[a] \times [b] [=] [=] \dots [=]$
+\begin{align}
+    x_1 &= a \times b \\
+    x_2 &= a^2 \times b \\
+    &\;\;\vdots \nonumber \\
+    x_n &= a^n \times b \\
+    \text{GT}_n &= \sum_{i=1}^n a^i \times b
+\end{align}
+
+\subsection{定数除算の数式定義}
+入力シーケンス：$[a] \div [b] [=] [=] \dots [=]$
+\begin{align}
+    y_1 &= a \div b = \frac{a}{b} \\
+    y_2 &= a \div b^2 = \frac{a}{b^2} \\
+    &\;\;\vdots \nonumber \\
+    y_n &= a \div b^n = \frac{a}{b^n} \\
+    \text{GT}_n &= \sum_{i=1}^n \frac{a}{b^i}
+\end{align}
+
+\subsection{パーセント定数計算の数式定義}
+入力シーケンス：$[a] \ [\%] \times [b] [=] [=] \dots [=]$（※または率の定数設定）
+\begin{align}
+    z_n &= \left(\frac{a}{100}\right)^n \times b \\
+    \text{GT}_n &= \sum_{i=1}^n \left(\frac{a}{100}\right)^i \times b
+\end{align}
+
+% ==============================================================================
+\chapter{定数乗除算とGTを用いた複利・年金計算}
+% ==============================================================================
+
+\section{複利終価（FV）と複利現価（PV）}
+元本を $PV$、割引率・利子率を $r$（割引係数 $1+r$）、期間を $n$ とする。
+
+\subsection{複利終価の計算}
+将来価値 $FV = PV \times (1+r)^n$ の算定：
+\begin{calcbox}{キー操作手順：FV}
+\begin{enumerate}
+    \item $[1 + r] \times [PV] [=]$ $\to PV(1+r)$ （1期後）
+    \item $[=]$ $\to PV(1+r)^2$ （2期後）
+    \item $[=]$ を合計 $n$ 回押す $\to FV = PV(1+r)^n$
+\end{enumerate}
+\end{calcbox}
+
+\subsection{複利現価の計算}
+将来のキャッシュフロー $FV$ を割り引く現価 $PV = \frac{FV}{(1+r)^n}$ の算定：
+\begin{calcbox}{キー操作手順：PV}
+\begin{enumerate}
+    \item $[FV] \div [1 + r] [=]$ $\to \frac{FV}{1+r}$ （1期割引）
+    \item $[=]$ $\to \frac{FV}{(1+r)^2}$ （2期割引）
+    \item $[=]$ を合計 $n$ 回押す $\to PV = \frac{FV}{(1+r)^n}$
+\end{enumerate}
+\end{calcbox}
+
+\section{年金現価と年金終価（GTの活用）}
+毎期末に均等額 $C$ を受け取る年金の現在価値合計 $PV_{\text{annuity}}$ は、除算定数計算とGTの直結によって求まる。
+
+\begin{equation}
+    PV_{\text{annuity}} = \sum_{i=1}^n \frac{C}{(1+r)^i}
+\end{equation}
+
+\begin{calcbox}{キー操作手順：年金現価の即時計算}
+\begin{enumerate}
+    \item 準備：$[AC]$ または $[GT]$ 2回押下でGTレジスタをクリア。
+    \item $[C] \div [1 + r] [=]$ （第1期の現在価値がGTに加算）
+    \item $[=]$ をさらに $(n-1)$ 回押下（各期の現在価値が自動蓄積）。
+    \item $[GT]$ を押下 $\to$ $\sum_{i=1}^n \frac{C}{(1+r)^i}$ が一発で求まる。
+\end{enumerate}
+\end{calcbox}
+
+% ==============================================================================
+\chapter{独立メモリを活用した会計方程式の解法}
+% ==============================================================================
+
+\section{拡張会計方程式の代数構造}
+動的会計方程式は次のように表される。
+\begin{equation}
+    \underbrace{\text{Assets} (A) + \text{Expenses} (E)}_{\text{借方要素（Debit Elements）}} = \underbrace{\text{Liabilities} (L) + \text{Owner's Equity} (OE) + \text{Revenues} (R)}_{\text{貸方要素（Credit Elements）}}
+\end{equation}
+
+これを整理し、未知の1要素（または任意の部分集合）を独立メモリ（$M$）へ集約して解く。
+\begin{equation}
+    A + E - L - OE - R = 0
+\end{equation}
+
+\section{2要素群既知からの未知数同定法}
+任意の組が判明している場合、借方要素は $[M+]$、貸方要素は $[M-]$ に投入することで、メモリの反転またはそのままの呼び出しにより未知数を確定できる。
+
+\begin{calcbox}{例：Assets, Expenses, Liabilities が判明しており、$(OE + R)$ を求める場合}
+\begin{enumerate}
+    \item $[CM]$ でメモリをクリア。
+    \item $[A] \ [M+]$
+    \item $[E] \ [M+]$
+    \item $[L] \ [M-]$
+    \item $[RM]$ 押下 $\to$ 残余額 $OE + R = A + E - L$ が即座に確定。
+\end{enumerate}
+\end{calcbox}
+
+% ==============================================================================
+\chapter{実務統合：現在価値評価を伴う会計測定モデル}
+% ==============================================================================
+
+\section{リース負債および使用権資産の測定}
+ファイナンス・リース取引等において、毎期の支払額 $PMT$、割引率 $r$、期間 $n$ から資産・負債計上額を電卓単体で算定し、貸借対照表（B/S）に転記する。
+
+\begin{equation}
+    \text{Lease Liability} = \sum_{t=1}^n \frac{PMT}{(1+r)^t}
+\end{equation}
+
+\begin{calcbox}{総合実行アルゴリズム}
+\begin{enumerate}
+    \item \textbf{年金現価の算定}:
+    $[AC] \to [PMT] \div [1+r] [=] \dots [=]$（$n$回）$\to [GT]$
+    \item \textbf{会計方程式への即時投入}:
+    この $GT$ 表示値（資産・負債額）をそのまま $[M+]$（Assets側へプール）。
+    \item \textbf{貸借差額の検証}:
+    同額を負債（Liabilities）に振り分ける処理も、クリアせず $[M-]$ を押下することで、$\text{Net Balance} = 0$ を確認できる。
+\end{enumerate}
+\end{calcbox}
+
+\section{減損損失・将来CF割引計算と費用認識}
+将来キャッシュフローが各期で異なる場合でも、除算定数計算と $[M+]$ を併用することで、多期間の回収可能価額算定から減損損失（Expenses）の計上までをノーペーパーで行うことが可能である。
